@@ -203,18 +203,52 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[oklch(0.08_0.015_265)]">
+      
+      {/* Özel CSS Animasyonları (Dalga ve Parlama) */}
+      <style>{`
+        @keyframes slowPan {
+          0% { transform: scale(1.05) translate(0, 0); }
+          50% { transform: scale(1.15) translate(-2%, 2%); }
+          100% { transform: scale(1.05) translate(0, 0); }
+        }
+        .animate-cinematic {
+          animation: slowPan 25s ease-in-out infinite;
+        }
+        @keyframes textShine {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .text-gold-animated {
+          background: linear-gradient(135deg, oklch(0.85 0.2 50), oklch(0.98 0.25 70), oklch(0.65 0.15 40), oklch(0.85 0.2 50));
+          background-size: 300% 300%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          animation: textShine 4s ease-in-out infinite;
+        }
+      `}</style>
+
       <Navbar scrolled={scrolled} />
 
       {/* ── HERO SECTION ── */}
       <section className="relative min-h-screen flex items-center overflow-hidden">
-        {/* Background image */}
-        <div className="absolute inset-0">
+        {/* Hareketli Sinematik Arka Plan */}
+        <div className="absolute inset-0 overflow-hidden bg-[oklch(0.08_0.015_265)]">
           <img
             src={HERO_BG}
             alt="Hero background"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover opacity-30"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.08_0.015_265/95%)] via-[oklch(0.08_0.015_265/70%)] to-[oklch(0.08_0.015_265/40%)]" />
+          <div
+            className="absolute inset-0 opacity-40 pointer-events-none animate-cinematic mix-blend-screen"
+            style={{
+              backgroundImage: `url(${WAVE_PATTERN})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.08_0.015_265)] via-[oklch(0.08_0.015_265/80%)] to-[oklch(0.08_0.015_265/10%)]" />
           <div className="absolute inset-0 bg-gradient-to-t from-[oklch(0.08_0.015_265)] via-transparent to-[oklch(0.08_0.015_265/30%)]" />
         </div>
 
@@ -229,13 +263,13 @@ export default function Home() {
               </span>
             </div>
 
-            {/* Main title */}
+            {/* Main title (Parlayan Animasyonlu) */}
             <h1
               className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight mb-2 reveal"
               style={{ fontFamily: "'Cinzel', serif", animationDelay: "80ms" }}
             >
               <span className="block text-[oklch(0.95_0.005_65)]">NAİM</span>
-              <span className="block text-gold-gradient">AKTAŞ</span>
+              <span className="block text-gold-animated">AKTAŞ</span>
             </h1>
 
             {/* Subtitle */}
