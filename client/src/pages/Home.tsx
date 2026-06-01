@@ -218,6 +218,7 @@ const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
 
     // Ekran boyutunu ayarla
     const resizeCanvas = () => {
+      if (!canvas) return;
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
     };
@@ -226,52 +227,44 @@ const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
 
     // Parçacık (Nokta) Ayarları
     const numPoints = 120; // Yan yana dizilecek nokta sayısı
-    const numLines = 6;    // Üst üste binecek dalga çizgisi sayısı
+    const numLines = 6;    // Üst üste binecek dalga çizgi sayısı
 
     const animate = () => {
       count += 0.015; // Dalgaların akış hızı
 
-      // Ekranı temizle ama hafif bir iz bırakması için temizleme rengini çok az opak yap
+      // Ekranı temizle
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Fare pozisyonunu yumuşatılmış geçişle (easing) güncelle
+      // Fare pozisyonunu yumuşatılmış geçişle güncelle
       const mouse = mouseRef.current;
       mouse.x += (mouse.targetX - mouse.x) * 0.08;
       mouse.y += (mouse.targetY - mouse.y) * 0.08;
 
       // Her bir dalga çizgisi için döngü
       for (let l = 0; l < numLines; l++) {
-        ctx.beginPath();
-        
-        // Çizgi rengini ve opaklığını ayarla (altın/amber tonu)
-        // oklch(0.75 0.18 45) tonuna yakın RGB: 230, 150, 40
         const opacity = (1 - l / numLines) * 0.5;
         ctx.fillStyle = `rgba(230, 160, 45, ${opacity})`;
 
         for (let i = 0; i < numPoints; i++) {
-          // Noktanın yatay düzlemdeki yeri
           const x = (canvas.width / (numPoints - 1)) * i;
 
           // Temel sinüs dalgası hesaplaması
           const baseWave = Math.sin(i * 0.05 + count + l * 0.5);
           const secondaryWave = Math.cos(i * 0.02 - count * 0.5 + l * 0.8);
           
-          // Dalga yüksekliği (Genişliği)
           let y = canvas.height * 0.6 + (baseWave + secondaryWave) * 35 * (l * 0.3 + 0.5);
 
-          // Fare etkileşimi: Fare yakındaysa noktaları yukarı/aşağı it/çek
+          // Fare etkileşimi
           const dx = x - mouse.x;
           const dy = y - mouse.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
           
           if (distance < 200) {
-            // Fare yakınlığına göre ekstra hareket esnekliği
             const force = (200 - distance) / 200;
             y += Math.sin(count * 5 + i) * 15 * force;
           }
 
-          // Noktaları (yanan sarı parçacıkları) çiz
-          // Arkadaki çizgiler daha küçük, öndekiler daha belirgin parlasın
+          // Noktaları çiz
           const radius = (Math.sin(count * 2 + i * 0.5) * 0.8 + 1.2) * (1.5 - l * 0.15);
           
           ctx.beginPath();
