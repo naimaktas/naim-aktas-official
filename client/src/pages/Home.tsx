@@ -378,7 +378,7 @@ export default function Home() {
 
       <Navbar scrolled={scrolled} />
 
-     {/* ── HERO ── */}
+      {/* ── HERO ── */}
       <section className="relative min-h-screen flex items-center overflow-hidden">
         <div className="absolute inset-0 bg-[oklch(0.07_0.018_265)]" />
         <img src={HERO_BG} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover opacity-10 pointer-events-none" />
@@ -392,12 +392,12 @@ export default function Home() {
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: "linear-gradient(to top, oklch(0.07 0.018 265) 0%, transparent 30%)" }} />
 
-        {/* ── Yan Yana 3 Kolonlu Yeni Düzen ── */}
+        {/* ── 2 kolonlu içerik ── */}
         <div className="container relative z-10 pt-20 pb-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12">
 
-            {/* SOL KOLON — Başlık ve bilgiler (Dokunulmadı) */}
-            <div className="lg:col-span-5 min-w-0">
+            {/* SOL — Başlık ve bilgiler */}
+            <div className="flex-1 min-w-0">
               {/* Etiket */}
               <div className="flex items-center gap-3 mb-4 hero-label">
                 <div className="gold-divider w-12" />
@@ -421,13 +421,13 @@ export default function Home() {
               {/* İstatistikler */}
               <div className="flex items-center gap-7 mb-6 reveal" style={{ animationDelay: "240ms" }}>
                 {[{ v: "71", l: "Parça" }, { v: "47", l: "Video" }, { v: "2020", l: "Yılından" }].map(({ v, l }, i) => (
-                  <React.Fragment key={l}>
-                    {i > 0 && <div className="w-px h-10 bg-[oklch(1_0_0/10%)]" />}
-                    <div>
+                  <>
+                    {i > 0 && <div key={`d${i}`} className="w-px h-10 bg-[oklch(1_0_0/10%)]" />}
+                    <div key={l}>
                       <div className="text-2xl font-bold text-[oklch(0.76_0.18_45)]" style={{ fontFamily: "'Cinzel', serif" }}>{v}</div>
                       <div className="text-[10px] text-[oklch(0.40_0.01_265)] tracking-[0.22em] uppercase mt-0.5">{l}</div>
                     </div>
-                  </React.Fragment>
+                  </>
                 ))}
               </div>
 
@@ -446,24 +446,10 @@ export default function Home() {
               </div>
             </div>
 
-            {/* ORTA KOLON — Tam Ortaya Hizalanan Medya Player */}
-            <div className="lg:col-span-4 flex justify-center items-center h-full reveal" style={{ animationDelay: "200ms" }}>
-              <div className="w-full">
-                <HeroPlayer />
-              </div>
+            {/* SAĞ — Medya Player */}
+            <div className="lg:w-80 xl:w-96 reveal" style={{ animationDelay: "200ms" }}>
+              <HeroPlayer />
             </div>
-
-            {/* SAĞ KOLON — Player'ın Sağ Yanına Alınan Sıradaki Şarkı Kutusu (Sol boyutla uyumlu) */}
-            <div className="lg:col-span-3 flex items-center h-full reveal" style={{ animationDelay: "250ms" }}>
-              <div className="p-4 rounded-xl border border-[oklch(1_0_0/6%)] bg-[oklch(0.12_0.012_265/40%)] w-full backdrop-blur-md text-left">
-                <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-[oklch(0.45_0.01_265)] block mb-2">Sıradaki Türkü</span>
-                <h4 className="text-xs font-semibold text-[oklch(0.85_0.005_65)] line-clamp-2" style={{ fontFamily: "'Cinzel', serif" }}>
-                  {nextTrack?.title || "Yükleniyor..."}
-                </h4>
-                <p className="text-[10px] text-[oklch(0.35_0.01_265)] mt-1.5">{nextTrack?.date}</p>
-              </div>
-            </div>
-
           </div>
         </div>
 
