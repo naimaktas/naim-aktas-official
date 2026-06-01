@@ -4,7 +4,6 @@
  * - Cinzel serif for headings, DM Sans for body
  * - Asymmetric hero, masonry-inspired track grid
  * - Smooth scroll reveals, hover effects
- * - Live p5.js-style gold waveform animation & mouse interaction
  */
 import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
@@ -184,100 +183,10 @@ export default function Home() {
   const [visibleCount, setVisibleCount] = useState(24);
   const tracksRef = useRef<HTMLDivElement>(null);
 
-  // Canvas referansı ve fare takibi için koordinat hafızası
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
-
-  // Scroll Dinleyicisi
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Fare Hareket Takipçisi
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current.targetX = e.clientX;
-      mouseRef.current.targetY = e.clientY;
-    };
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
-  // Akıcı Altın Dalga Formu ve Parıldayan Işık Animasyon Motoru
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let animationFrameId: number;
-    let count = 0;
-
-    // Tuvali ve ekran boyutunu senkronize etme
-    const resizeCanvas = () => {
-      if (!canvas) return;
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    };
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-
-    const numPoints = 120; // Yatay çizgi üzerindeki nokta yoğunluğu
-    const numLines = 6;    // Katmanlı dalga sayısı
-
-    const animate = () => {
-      count += 0.015; // Dalganın akış hızı
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      const mouse = mouseRef.current;
-      // Yaylanma (easing) efekti ile fareyi takip et
-      mouse.x += (mouse.targetX - mouse.x) * 0.08;
-      mouse.y += (mouse.targetY - mouse.y) * 0.08;
-
-      for (let l = 0; l < numLines; l++) {
-        const opacity = (1 - l / numLines) * 0.5;
-        ctx.fillStyle = `rgba(230, 160, 45, ${opacity})`;
-
-        for (let i = 0; i < numPoints; i++) {
-          const x = (canvas.width / (numPoints - 1)) * i;
-          
-          // Sinüs ve Kosinüs dalga kombinasyonları
-          const baseWave = Math.sin(i * 0.05 + count + l * 0.5);
-          const secondaryWave = Math.cos(i * 0.02 - count * 0.5 + l * 0.8);
-          
-          let y = canvas.height * 0.6 + (baseWave + secondaryWave) * 35 * (l * 0.3 + 0.5);
-
-          // Fare yakınlık etkileşimi hesaplaması
-          const dx = x - mouse.x;
-          const dy = y - mouse.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < 200) {
-            const force = (200 - distance) / 200;
-            y += Math.sin(count * 5 + i) * 15 * force;
-          }
-
-          // Noktanın parıldama yarıçapını hesaplama
-          const radius = (Math.sin(count * 2 + i * 0.5) * 0.8 + 1.2) * (1.5 - l * 0.15);
-          
-          ctx.beginPath();
-          ctx.arc(x, y, Math.max(0.5, radius), 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-
-      animationFrameId = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    return () => {
-      window.removeEventListener("resize", resizeCanvas);
-      cancelAnimationFrame(animationFrameId);
-    };
   }, []);
 
   const filteredTracks = tracks.filter(track =>
@@ -323,20 +232,12 @@ export default function Home() {
 
       {/* ── HERO SECTION ── */}
       <section className="relative min-h-screen flex items-center overflow-hidden">
-        {/* Hareketli Sinematik Arka Plan */}
         <div className="absolute inset-0 overflow-hidden bg-[oklch(0.08_0.015_265)]">
           <img
             src={HERO_BG}
             alt="Hero background"
             className="w-full h-full object-cover opacity-30"
           />
-          
-          {/* Canlı Etkileşimli Dijital Tuval (Canvas) */}
-          <canvas 
-            ref={canvasRef} 
-            className="absolute inset-0 w-full h-full pointer-events-none mix-blend-screen"
-          />
-
           <div
             className="absolute inset-0 opacity-40 pointer-events-none animate-cinematic mix-blend-screen"
             style={{
@@ -352,33 +253,29 @@ export default function Home() {
         {/* Content */}
         <div className="container relative z-10 pt-24 pb-16">
           <div className="max-w-2xl">
-            {/* Label */}
-            <div className="flex items-center gap-3 mb-6 reveal" style={{ animationDelay: "0ms" }}>
+            <div className="flex items-center gap-3 mb-6 reveal">
               <div className="gold-divider w-12" />
               <span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)] font-medium">
                 Resmi Müzik Kanalı
               </span>
             </div>
 
-            {/* Main title (Parlayan Animasyonlu) */}
             <h1
               className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight mb-2 reveal"
-              style={{ fontFamily: "'Cinzel', serif", animationDelay: "80ms" }}
+              style={{ fontFamily: "'Cinzel', serif" }}
             >
               <span className="block text-[oklch(0.95_0.005_65)]">NAİM</span>
               <span className="block text-gold-animated">AKTAŞ</span>
             </h1>
 
-            {/* Subtitle */}
             <p
               className="text-lg md:text-xl text-[oklch(0.65_0.01_265)] mt-4 mb-8 font-light tracking-wide reveal"
-              style={{ fontFamily: "'Raleway', sans-serif", animationDelay: "160ms" }}
+              style={{ fontFamily: "'Raleway', sans-serif" }}
             >
               Türk Halk Müziği &amp; Türkü Arşivi
             </p>
 
-            {/* Stats */}
-            <div className="flex items-center gap-8 mb-10 reveal" style={{ animationDelay: "240ms" }}>
+            <div className="flex items-center gap-8 mb-10 reveal">
               <div>
                 <div className="text-2xl font-bold text-[oklch(0.75_0.18_45)]" style={{ fontFamily: "'Cinzel', serif" }}>71</div>
                 <div className="text-xs text-[oklch(0.45_0.01_265)] tracking-wider uppercase">Parça</div>
@@ -395,8 +292,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap gap-4 reveal" style={{ animationDelay: "320ms" }}>
+            <div className="flex flex-wrap gap-4 reveal">
               <a
                 href={socialLinks.youtube}
                 target="_blank"
@@ -417,7 +313,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Scroll indicator */}
         <button
           onClick={scrollToTracks}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[oklch(0.45_0.01_265)] hover:text-[oklch(0.75_0.18_45)] transition-colors animate-bounce"
@@ -430,7 +325,6 @@ export default function Home() {
       {/* ── TRACKS SECTION ── */}
       <section ref={tracksRef} className="py-16 md:py-24">
         <div className="container">
-          {/* Section header */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
               <div className="flex items-center gap-3 mb-3">
@@ -448,7 +342,6 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Search */}
             <div className="relative w-full md:w-72">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[oklch(0.45_0.01_265)]" />
               <Input
@@ -464,10 +357,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Gold divider */}
           <div className="gold-divider mb-12" />
 
-          {/* Track grid */}
           {displayedTracks.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {displayedTracks.map((track, index) => (
@@ -481,7 +372,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* Load more */}
           {hasMore && (
             <div className="text-center mt-12">
               <button
@@ -499,7 +389,6 @@ export default function Home() {
       <footer className="border-t border-[oklch(1_0_0/8%)] py-12">
         <div className="container">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            {/* Brand */}
             <div className="text-center md:text-left">
               <h3
                 className="text-xl font-bold text-[oklch(0.95_0.005_65)] mb-1"
@@ -512,7 +401,6 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Social links */}
             <div className="flex items-center gap-4">
               <a
                 href={socialLinks.youtube}
