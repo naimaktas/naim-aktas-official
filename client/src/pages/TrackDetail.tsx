@@ -115,7 +115,8 @@ export default function TrackDetail() {
         </div>
 
         <div className="container -mt-24 relative z-10 pb-16">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* ÇÖZÜM: Buradaki grid alanına items-start eklendi */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             {/* Main content */}
             <div className="lg:col-span-2">
               {/* Track info */}
