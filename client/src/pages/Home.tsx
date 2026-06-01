@@ -180,16 +180,117 @@ function TrackCard({ track, index }: { track: Track; index: number }) {
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [visibleCount, setVisibleCount] = useState(24);
-  const tracksRef = useRef<HTMLDivElement>(null);
+const [searchQuery, setSearchQuery] = useState("");
+const [visibleCount, setVisibleCount] = useState(24);
+const tracksRef = useRef<HTMLDivElement>(null);
+
+// İKİNCİ ADIM: Canvas referansı ve fare takibi için eklediğimiz satırlar
+const canvasRef = useRef<HTMLCanvasElement>(null);
+const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+// ÜÇÜNCÜ ADIM: Fare hareketleri ve ekran boyutu takibi
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseRef.current.targetX = e.clientX;
+      mouseRef.current.targetY = e.clientY;
+    };
 
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+  // DÖRDÜNCÜ ADIM: Dalga Formu ve Parıldayan Altın Noktalar Animasyon Motoru
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let count = 0;
+
+    // Ekran boyutunu ayarla
+    const resizeCanvas = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    // Parçacık (Nokta) Ayarları
+    const numPoints = 120; // Yan yana dizilecek nokta sayısı
+    const numLines = 6;    // Üst üste binecek dalga çizgisi sayısı
+
+    const animate = () => {
+      count += 0.015; // Dalgaların akış hızı
+
+      // Ekranı temizle ama hafif bir iz bırakması için temizleme rengini çok az opak yap
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Fare pozisyonunu yumuşatılmış geçişle (easing) güncelle
+      const mouse = mouseRef.current;
+      mouse.x += (mouse.targetX - mouse.x) * 0.08;
+      mouse.y += (mouse.targetY - mouse.y) * 0.08;
+
+      // Her bir dalga çizgisi için döngü
+      for (let l = 0; l < numLines; l++) {
+        ctx.beginPath();
+        
+        // Çizgi rengini ve opaklığını ayarla (altın/amber tonu)
+        // oklch(0.75 0.18 45) tonuna yakın RGB: 230, 150, 40
+        const opacity = (1 - l / numLines) * 0.5;
+        ctx.fillStyle = `rgba(230, 160, 45, ${opacity})`;
+
+        for (let i = 0; i < numPoints; i++) {
+          // Noktanın yatay düzlemdeki yeri
+          const x = (canvas.width / (numPoints - 1)) * i;
+
+          // Temel sinüs dalgası hesaplaması
+          const baseWave = Math.sin(i * 0.05 + count + l * 0.5);
+          const secondaryWave = Math.cos(i * 0.02 - count * 0.5 + l * 0.8);
+          
+          // Dalga yüksekliği (Genişliği)
+          let y = canvas.height * 0.6 + (baseWave + secondaryWave) * 35 * (l * 0.3 + 0.5);
+
+          // Fare etkileşimi: Fare yakındaysa noktaları yukarı/aşağı it/çek
+          const dx = x - mouse.x;
+          const dy = y - mouse.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 200) {
+            // Fare yakınlığına göre ekstra hareket esnekliği
+            const force = (200 - distance) / 200;
+            y += Math.sin(count * 5 + i) * 15 * force;
+          }
+
+          // Noktaları (yanan sarı parçacıkları) çiz
+          // Arkadaki çizgiler daha küçük, öndekiler daha belirgin parlasın
+          const radius = (Math.sin(count * 2 + i * 0.5) * 0.8 + 1.2) * (1.5 - l * 0.15);
+          
+          ctx.beginPath();
+          ctx.arc(x, y, Math.max(0.5, radius), 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    // Temizlik
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
   const filteredTracks = tracks.filter(track =>
     track.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -232,26 +333,31 @@ export default function Home() {
       <Navbar scrolled={scrolled} />
 
       {/* ── HERO SECTION ── */}
-      <section className="relative min-h-screen flex items-center overflow-hidden">
-        {/* Hareketli Sinematik Arka Plan */}
-        <div className="absolute inset-0 overflow-hidden bg-[oklch(0.08_0.015_265)]">
-          <img
-            src={HERO_BG}
-            alt="Hero background"
-            className="w-full h-full object-cover opacity-30"
-          />
-          <div
-            className="absolute inset-0 opacity-40 pointer-events-none animate-cinematic mix-blend-screen"
-            style={{
-              backgroundImage: `url(${WAVE_PATTERN})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.08_0.015_265)] via-[oklch(0.08_0.015_265/80%)] to-[oklch(0.08_0.015_265/10%)]" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[oklch(0.08_0.015_265)] via-transparent to-[oklch(0.08_0.015_265/30%)]" />
-        </div>
+      {/* Hareketli Sinematik Arka Plan */}
+<div className="absolute inset-0 overflow-hidden bg-[oklch(0.08_0.015_265)]">
+  <img
+    src={HERO_BG}
+    alt="Hero background"
+    className="w-full h-full object-cover opacity-30"
+  />
+  
+  {/* YENİ EKLEDİĞİMİZ CANLI DALGA VE PARILDAYAN NOKTA TUVALİ */}
+  <canvas 
+    ref={canvasRef} 
+    className="absolute inset-0 w-full h-full pointer-events-none mix-blend-screen"
+  />
 
+  <div
+    className="absolute inset-0 opacity-40 pointer-events-none animate-cinematic mix-blend-screen"
+    style={{
+      backgroundImage: `url(${WAVE_PATTERN})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    }}
+  />
+  <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.08_0.015_265)] via-[oklch(0.08_0.015_265/80%)] to-[oklch(0.08_0.015_265/10%)]" />
+  <div className="absolute inset-0 bg-gradient-to-t from-[oklch(0.08_0.015_265)] via-transparent to-[oklch(0.08_0.015_265/30%)]" />
+</div>
         {/* Content */}
         <div className="container relative z-10 pt-24 pb-16">
           <div className="max-w-2xl">
