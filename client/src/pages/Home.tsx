@@ -4,6 +4,7 @@
  * - Cinzel serif for headings, DM Sans for body
  * - Asymmetric hero, masonry-inspired track grid
  * - Smooth scroll reveals, hover effects
+ * - Live p5.js-style gold waveform animation & mouse interaction
  */
 import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
@@ -118,7 +119,6 @@ function TrackCard({ track, index }: { track: Track; index: number }) {
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
             onError={(e) => {
-              // Fallback to HQ default if maxresdefault not available
               const target = e.target as HTMLImageElement;
               if (track.youtubeId && target.src.includes('maxresdefault')) {
                 target.src = `https://img.youtube.com/vi/${track.youtubeId}/hqdefault.jpg`;
@@ -184,10 +184,100 @@ export default function Home() {
   const [visibleCount, setVisibleCount] = useState(24);
   const tracksRef = useRef<HTMLDivElement>(null);
 
+  // Canvas referansı ve fare takibi için koordinat hafızası
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
+
+  // Scroll Dinleyicisi
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Fare Hareket Takipçisi
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseRef.current.targetX = e.clientX;
+      mouseRef.current.targetY = e.clientY;
+    };
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  // Akıcı Altın Dalga Formu ve Parıldayan Işık Animasyon Motoru
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let count = 0;
+
+    // Tuvali ve ekran boyutunu senkronize etme
+    const resizeCanvas = () => {
+      if (!canvas) return;
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    const numPoints = 120; // Yatay çizgi üzerindeki nokta yoğunluğu
+    const numLines = 6;    // Katmanlı dalga sayısı
+
+    const animate = () => {
+      count += 0.015; // Dalganın akış hızı
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const mouse = mouseRef.current;
+      // Yaylanma (easing) efekti ile fareyi takip et
+      mouse.x += (mouse.targetX - mouse.x) * 0.08;
+      mouse.y += (mouse.targetY - mouse.y) * 0.08;
+
+      for (let l = 0; l < numLines; l++) {
+        const opacity = (1 - l / numLines) * 0.5;
+        ctx.fillStyle = `rgba(230, 160, 45, ${opacity})`;
+
+        for (let i = 0; i < numPoints; i++) {
+          const x = (canvas.width / (numPoints - 1)) * i;
+          
+          // Sinüs ve Kosinüs dalga kombinasyonları
+          const baseWave = Math.sin(i * 0.05 + count + l * 0.5);
+          const secondaryWave = Math.cos(i * 0.02 - count * 0.5 + l * 0.8);
+          
+          let y = canvas.height * 0.6 + (baseWave + secondaryWave) * 35 * (l * 0.3 + 0.5);
+
+          // Fare yakınlık etkileşimi hesaplaması
+          const dx = x - mouse.x;
+          const dy = y - mouse.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 200) {
+            const force = (200 - distance) / 200;
+            y += Math.sin(count * 5 + i) * 15 * force;
+          }
+
+          // Noktanın parıldama yarıçapını hesaplama
+          const radius = (Math.sin(count * 2 + i * 0.5) * 0.8 + 1.2) * (1.5 - l * 0.15);
+          
+          ctx.beginPath();
+          ctx.arc(x, y, Math.max(0.5, radius), 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+      cancelAnimationFrame(animationFrameId);
+    };
   }, []);
 
   const filteredTracks = tracks.filter(track =>
@@ -240,6 +330,13 @@ export default function Home() {
             alt="Hero background"
             className="w-full h-full object-cover opacity-30"
           />
+          
+          {/* Canlı Etkileşimli Dijital Tuval (Canvas) */}
+          <canvas 
+            ref={canvasRef} 
+            className="absolute inset-0 w-full h-full pointer-events-none mix-blend-screen"
+          />
+
           <div
             className="absolute inset-0 opacity-40 pointer-events-none animate-cinematic mix-blend-screen"
             style={{
