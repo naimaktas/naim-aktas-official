@@ -1,6 +1,7 @@
 [build]
-  command = "pnpm run build"
-  publish = "dist/public"
+  base = "client"
+  command = "pnpm install && pnpm run build"
+  publish = "client/dist"
 
 [[redirects]]
   from = "/*"
