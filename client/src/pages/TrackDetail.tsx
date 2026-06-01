@@ -115,8 +115,8 @@ export default function TrackDetail() {
         </div>
 
         <div className="container -mt-24 relative z-10 pb-16">
-          {/* ÇÖZÜM: Buradaki grid alanına items-start eklendi */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          {/* GÜNCELLEME: Grid yapısı items-stretch kalıp sütunların dikey boyunu eşit tutacak */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main content */}
             <div className="lg:col-span-2">
               {/* Track info */}
@@ -142,7 +142,7 @@ export default function TrackDetail() {
               {track.youtubeId ? (
                 <div className="relative rounded-2xl overflow-hidden bg-[oklch(0.05_0.01_265)] border border-[oklch(1_0_0/8%)] mb-8">
                   {!playing ? (
-                    <div className="relative aspect-video">
+                    <div className="relative aspect-video w-full">
                       <img
                         src={thumbnail}
                         alt={track.title}
@@ -168,13 +168,13 @@ export default function TrackDetail() {
                       </div>
                     </div>
                   ) : (
-                    <div className="aspect-video">
+                    <div className="relative aspect-video w-full">
                       <iframe
                         src={`https://www.youtube.com/embed/${track.youtubeId}?autoplay=1&rel=0&modestbranding=1`}
                         title={track.title}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
-                        className="w-full h-full"
+                        className="absolute inset-0 w-full h-full"
                       />
                     </div>
                   )}
@@ -253,7 +253,8 @@ export default function TrackDetail() {
             </div>
 
             {/* Sidebar - Related tracks */}
-            <div className="lg:col-span-1">
+            {/* GÜNCELLEME: h-full eklenerek sağ sütunun dikey esnemesi sağlandı */}
+            <div className="lg:col-span-1 h-full">
               <div className="sticky top-24">
                 <h3
                   className="text-sm font-semibold text-[oklch(0.65_0.01_265)] mb-4 tracking-wider uppercase"
