@@ -155,7 +155,7 @@ function HeroPlayer() {
   const next = () => setCurrent((c) => (c + 1) % videoTracks.length);
 
   return (
-    <div className="relative z-10 flex flex-col gap-3 w-full max-w-sm">
+    <div className="relative z-10 flex flex-col gap-3 w-full max-w-xs ml-auto">
       {/* Video ekranı */}
       <div className="relative rounded-xl overflow-hidden border border-[oklch(0.75_0.18_45/20%)] shadow-[0_0_40px_oklch(0.75_0.18_45/15%)]">
         <div className="relative aspect-video bg-black">
@@ -180,9 +180,9 @@ function HeroPlayer() {
               <div className="absolute inset-0 bg-[oklch(0_0_0/30%)] flex items-center justify-center">
                 <button
                   onClick={() => setPlaying(true)}
-                  className="w-16 h-16 rounded-full bg-[oklch(0.75_0.18_45)] flex items-center justify-center hover:bg-[oklch(0.82_0.18_45)] transition-all duration-200 shadow-[0_0_30px_oklch(0.75_0.18_45/50%)] hover:scale-105 active:scale-95"
+                  className="w-14 h-14 rounded-full bg-[oklch(0.75_0.18_45)] flex items-center justify-center hover:bg-[oklch(0.82_0.18_45)] transition-all duration-200 shadow-[0_0_30px_oklch(0.75_0.18_45/50%)] hover:scale-105 active:scale-95"
                 >
-                  <Play className="w-7 h-7 text-[oklch(0.08_0.015_265)] fill-current ml-0.5" />
+                  <Play className="w-6 h-6 text-[oklch(0.08_0.015_265)] fill-current ml-0.5" />
                 </button>
               </div>
             </>
@@ -190,7 +190,7 @@ function HeroPlayer() {
         </div>
 
         {/* Şu an çalan bilgisi */}
-        <div className="bg-[oklch(0.10_0.015_265/95%)] px-4 py-3 flex items-center justify-between border-t border-[oklch(0.75_0.18_45/15%)]">
+        <div className="bg-[oklch(0.10_0.015_265/95%)] px-3 py-2.5 flex items-center justify-between border-t border-[oklch(0.75_0.18_45/15%)]">
           <div className="flex items-center gap-2 min-w-0">
             <Volume2 className="w-3.5 h-3.5 text-[oklch(0.75_0.18_45)] shrink-0" />
             <span className="text-xs text-[oklch(0.80_0.005_65)] truncate" style={{ fontFamily: "'Cinzel', serif" }}>
@@ -212,13 +212,13 @@ function HeroPlayer() {
           <button
             key={track.id}
             onClick={() => { setCurrent(i); setPlaying(true); }}
-            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all duration-150 ${
+            className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-left transition-all duration-150 ${
               i === current
                 ? "bg-[oklch(0.75_0.18_45/18%)] border border-[oklch(0.75_0.18_45/35%)]"
                 : "hover:bg-[oklch(1_0_0/5%)] border border-transparent"
             }`}
           >
-            <span className={`text-[10px] font-mono shrink-0 w-5 text-right ${i === current ? "text-[oklch(0.75_0.18_45)]" : "text-[oklch(0.35_0.01_265)]"}`}>
+            <span className={`text-[10px] font-mono shrink-0 w-4 text-right ${i === current ? "text-[oklch(0.75_0.18_45)]" : "text-[oklch(0.35_0.01_265)]"}`}>
               {i === current ? "▶" : String(i + 1).padStart(2, "0")}
             </span>
             <span className={`text-xs truncate ${i === current ? "text-[oklch(0.90_0.005_65)]" : "text-[oklch(0.55_0.01_265)]"}`}
