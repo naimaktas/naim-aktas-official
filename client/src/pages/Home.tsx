@@ -1,13 +1,9 @@
-/
-
-DESIGN: "Velvet Underground" — Cinematic Dark Luxury
-
-PlayStation menü tarzı güçlü akan dalgalar
-
-3 kolonlu hero: sol içerik + orta medya player + sağ sıradaki türkü kutusu
-
-Sıkışık layout, yamuk olmayan başlık
-*/
+/**
+ * DESIGN: "Velvet Underground" — Cinematic Dark Luxury
+ * - PlayStation menü tarzı güçlü akan dalgalar
+ * - 3 kolonlu hero: sol içerik + orta medya player + sağ sıradaki türkü kutusu
+ * - Sıkışık layout, yamuk olmayan başlık
+ */
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
 import { tracks, socialLinks, getYoutubeThumbnail, type Track } from "@/lib/tracks";
