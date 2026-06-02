@@ -328,7 +328,7 @@ export default function Home() {
 const [scrolled, setScrolled]         = useState(false);
 const [searchQuery, setSearchQuery]   = useState("");
 const [visibleCount, setVisibleCount] = useState(24);
-const [nextTrack, setNextTrack]       = useState<Track | null>(null);
+const [nextTrack, setNextTrack]       = useState<Track null |>(null);
 const tracksRef = useRef(null);
 
 useEffect(() => {
@@ -371,27 +371,27 @@ return (
     .hero-label { animation: lblPulse 3s ease-in-out infinite; }
   `}</style>
 
-  <Navbar scrolled={scrolled} />
+  <Navbar scrolled="{scrolled}"/>
 
-  {/* ── HERO ── */}
+  
   <section className="relative min-h-screen flex items-center overflow-hidden">
     <div className="absolute inset-0 bg-[oklch(0.07_0.018_265)]" />
     <img src={HERO_BG} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover opacity-10 pointer-events-none" />
 
-    {/* Canvas dalgalar */}
-    <HeroCanvas />
+    
+    <HeroCanvas/>
 
-    {/* Sol koyu gradyan — içerik okunabilirliği */}
+    
     <div className="absolute inset-0 pointer-events-none"
       style={{ background: "linear-gradient(to right, oklch(0.07 0.018 265) 25%, oklch(0.07 0.018 265 / 0.65) 50%, transparent 75%)" }} />
     <div className="absolute inset-0 pointer-events-none"
       style={{ background: "linear-gradient(to top, oklch(0.07 0.018 265) 0%, transparent 30%)" }} />
 
-    {/* ── Yan Yana 3 Kolonlu Yeni Düzen ── */}
+    
     <div className="container relative z-10 pt-20 pb-10">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full">
 
-        {/* SOL KOLON — Başlık ve bilgiler */}
+        
         <div className="lg:col-span-5 min-w-0">
           <div className="flex items-center gap-3 mb-4 hero-label">
             <div className="gold-divider w-12" />
@@ -412,7 +412,7 @@ return (
 
           <div className="flex items-center gap-7 mb-6 reveal" style={{ animationDelay: "240ms" }}>
             {[{ v: "71", l: "Parça" }, { v: "47", l: "Video" }, { v: "2020", l: "Yılından" }].map(({ v, l }, i) => (
-              <React.Fragment key={l}>
+              <React.Fragment key="{l}">
                 {i > 0 && <div className="w-px h-10 bg-[oklch(1_0_0/10%)]" />}
                 <div>
                   <div className="text-2xl font-bold text-[oklch(0.76_0.18_45)]" style={{ fontFamily: "'Cinzel', serif" }}>{v}</div>
@@ -425,25 +425,25 @@ return (
           <div className="flex flex-wrap gap-3 reveal" style={{ animationDelay: "320ms" }}>
             <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-2 px-6 py-3 bg-[oklch(0.75_0.18_45)] text-[oklch(0.08_0.015_265)] rounded-full font-semibold text-sm tracking-wide hover:bg-[oklch(0.82_0.18_45)] active:scale-[0.97] transition-all duration-200">
-              <Youtube className="w-4 h-4" />
+              <Youtube className="w-4 h-4"/>
               YouTube'da İzle
             </a>
             <button onClick={scrollToTracks}
               className="flex items-center gap-2 px-6 py-3 border border-[oklch(0.75_0.18_45/45%)] text-[oklch(0.85_0.005_65)] rounded-full font-medium text-sm tracking-wide hover:border-[oklch(0.75_0.18_45/80%)] hover:bg-[oklch(0.75_0.18_45/10%)] active:scale-[0.97] transition-all duration-200">
-              <Music className="w-4 h-4" />
+              <Music className="w-4 h-4"/>
               Tüm Parçalar
             </button>
           </div>
         </div>
 
-        {/* ORTA KOLON — Tam Ortaya Hizalanan Medya Player */}
+        
         <div className="lg:col-span-4 flex justify-center items-center h-full reveal" style={{ animationDelay: "200ms" }}>
           <div className="w-full">
-            <HeroPlayer onTrackChange={setNextTrack} />
+            <HeroPlayer onTrackChange="{setNextTrack}"/>
           </div>
         </div>
 
-        {/* SAĞ KOLON — Sıradaki Şarkı Kutusu */}
+        
         <div className="lg:col-span-3 flex items-center h-full reveal" style={{ animationDelay: "250ms" }}>
           <div className="p-4 rounded-xl border border-[oklch(1_0_0/6%)] bg-[oklch(0.12_0.012_265/40%)] w-full backdrop-blur-md text-left">
             <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-[oklch(0.45_0.01_265)] block mb-2">Sıradaki Türkü</span>
@@ -460,11 +460,11 @@ return (
     <button onClick={scrollToTracks}
       className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[oklch(0.38_0.01_265)] hover:text-[oklch(0.75_0.18_45)] transition-colors animate-bounce"
       aria-label="Aşağı kaydır">
-      <ChevronDown className="w-5 h-5" />
+      <ChevronDown className="w-5 h-5"/>
     </button>
   </section>
 
-  {/* ── PARÇALAR ── */}
+  
   <section ref={tracksRef} className="py-16 md:py-24">
     <div className="container">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
@@ -477,20 +477,19 @@ return (
           <p className="text-sm text-[oklch(0.45_0.01_265)] mt-2">{filteredTracks.length} parça bulundu</p>
         </div>
         <div className="relative w-full md:w-72">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[oklch(0.45_0.01_265)]" />
-          <Input type="text" placeholder="Parça ara..." value={searchQuery}
-            onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(24); }}
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[oklch(0.45_0.01_265)]"/>
+          <Input onChange="{(e)" placeholder="Parça ara..." type="text" value="{searchQuery}"> { setSearchQuery(e.target.value); setVisibleCount(24); }}
             className="pl-9 bg-[oklch(0.12_0.012_265)] border-[oklch(1_0_0/10%)] text-[oklch(0.85_0.005_65)] placeholder:text-[oklch(0.35_0.01_265)] focus:border-[oklch(0.75_0.18_45/50%)] focus:ring-[oklch(0.75_0.18_45/20%)]" />
         </div>
       </div>
       <div className="gold-divider mb-12" />
       {displayedTracks.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {displayedTracks.map((track, index) => <TrackCard key={track.id} track={track} index={index} />)}
+          {displayedTracks.map((track, index) => <TrackCard index="{index}" key="{track.id}" track="{track}"/>)}
         </div>
       ) : (
         <div className="text-center py-24">
-          <Music className="w-12 h-12 text-[oklch(0.25_0.01_265)] mx-auto mb-4" />
+          <Music className="w-12 h-12 text-[oklch(0.25_0.01_265)] mx-auto mb-4"/>
           <p className="text-[oklch(0.45_0.01_265)]">Parça bulunamadı</p>
         </div>
       )}
@@ -505,7 +504,7 @@ return (
     </div>
   </section>
 
-  {/* ── FOOTER ── */}
+  
   <footer className="border-t border-[oklch(1_0_0/8%)] py-12">
     <div className="container">
       <div className="flex flex-col md:flex-row items-center justify-between gap-8">
@@ -522,7 +521,7 @@ return (
             <a key={label} href={href} target="_blank" rel="noopener noreferrer"
               className="group w-11 h-11 rounded-full border border-[oklch(1_0_0/10%)] flex items-center justify-center hover:border-[oklch(0.75_0.18_45/60%)] hover:bg-[oklch(0.75_0.18_45/10%)] transition-all duration-200"
               aria-label={label}>
-              <Icon className="w-5 h-5 text-[oklch(0.45_0.01_265)] group-hover:text-[oklch(0.75_0.18_45)] transition-colors" />
+              <Icon className="w-5 h-5 text-[oklch(0.45_0.01_265)] group-hover:text-[oklch(0.75_0.18_45)] transition-colors"/>
             </a>
           ))}
         </div>
