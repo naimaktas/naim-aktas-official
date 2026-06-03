@@ -73,7 +73,7 @@ export const tracks: Track[] = [
   { id: 61, title: "Huzurum Kalmadı", slug: "huzurum-kalmadi", youtubeId: "FPHguEHFRtY", date: "21 Nisan 2020" },
   { id: 62, title: "Kara Köprü", slug: "kara-kopru", youtubeId: "5b1cqXbJzo8", date: "21 Nisan 2020" },
   { id: 63, title: "İki Dağın Arasında Kalmışam", slug: "iki-dagin-arasinda-kalmisam", youtubeId: "MPsLujvi5j0", date: "21 Nisan 2020" },
-  { id: 64, title: "Aşağıdan Gelir", slug: "asagidan-gelir", youtubeId: "xfMgRGRkLw", date: "21 Nisan 2020" },
+  { id: 64, title: "Aşağıdan Gelir", slug: "asagidan-gelir", youtubeId: "-xfMgRGRkLw", date: "21 Nisan 2020" },
   { id: 65, title: "Yandı Ha Yandı", slug: "yandi-ha-yandi", youtubeId: "mGQzj-ZAUxM", date: "21 Nisan 2020" },
   { id: 66, title: "Ne İncecik Boyun Var", slug: "ne-incecik-boyun-var", youtubeId: "SOJUKf7B7Ts", date: "21 Nisan 2020" },
   { id: 67, title: "He Güley", slug: "he-guley", youtubeId: "85s6ipNKWtM", date: "21 Nisan 2020" },
