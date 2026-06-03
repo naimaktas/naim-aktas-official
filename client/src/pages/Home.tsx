@@ -206,32 +206,46 @@ function HeroPlayer() {
         </div>
       </div>
 
-     {/* Mini liste (Sağ) */}
-      <div className="flex-1 md:max-w-[320px] flex flex-col gap-1 max-h-[320px] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        {videoTracks.slice(0, 75).map((track, i) => (
-          <button
-            key={track.id}
-            onClick={() => { setCurrent(i); setPlaying(true); }}
-            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all duration-150 ${
-              i === current
-                ? "bg-[oklch(0.75_0.18_45/18%)] border border-[oklch(0.75_0.18_45/35%)]"
-                : "hover:bg-[oklch(1_0_0/5%)] border border-transparent"
-            }`}
-          >
-            <span className={`text-xs font-mono shrink-0 w-5 text-right ${i === current ? "text-[oklch(0.75_0.18_45)]" : "text-[oklch(0.55_0.01_265)]"}`}>
-              {i === current ? "▶" : String(i + 1).padStart(2, "0")}
-            </span>
-            <span className={`text-sm truncate ${i === current ? "text-[oklch(0.90_0.005_65)]" : "text-[oklch(0.75_0.01_265)]"}`}
-              style={{ fontFamily: "'Cinzel', serif" }}>
-              {track.title}
-            </span>
-          </button>
-        ))}
+     {/* Mini liste (Sağ) - Kademeli Solma Efektli */}
+      <div className="flex-1 md:max-w-[320px] flex flex-col gap-1.5 self-start w-full">
+        {videoTracks.map((track, i) => {
+          const diff = i - current;
+          
+          // Geçmiş şarkıları ve sonraki 5. şarkıdan sonrasını listeleme (Kutuyu temiz tutar)
+          if (diff < 0 || diff > 4) return null;
+
+          // Mesafeye göre opaklık (solma) dereceleri
+          const opacityClass = 
+            diff === 0 ? "opacity-100" :
+            diff === 1 ? "opacity-70" :
+            diff === 2 ? "opacity-40" :
+            diff === 3 ? "opacity-15" : 
+            "opacity-5";
+
+          return (
+            <button
+              key={track.id}
+              onClick={() => { setCurrent(i); setPlaying(true); }}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all duration-300 ${opacityClass} ${
+                i === current
+                  ? "bg-[oklch(0.75_0.18_45/18%)] border border-[oklch(0.75_0.18_45/35%)] shadow-[0_0_15px_oklch(0.75_0.18_45/10%)] scale-[1.02]"
+                  : "hover:bg-[oklch(1_0_0/5%)] border border-transparent hover:opacity-100"
+              }`}
+            >
+              <span className={`text-xs font-mono shrink-0 w-5 text-right ${i === current ? "text-[oklch(0.75_0.18_45)]" : "text-[oklch(0.55_0.01_265)]"}`}>
+                {i === current ? "▶" : String(i + 1).padStart(2, "0")}
+              </span>
+              <span className={`text-sm truncate ${i === current ? "text-[oklch(0.90_0.005_65)] font-medium" : "text-[oklch(0.75_0.01_265)]"}`}
+                style={{ fontFamily: "'Cinzel', serif" }}>
+                {track.title}
+              </span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
 }
-
 // ── Waveform Bars ───────────────────────────────────────────────────────────
 function WaveformBars({ count = 12, className = "" }: { count?: number; className?: string }) {
   return (
