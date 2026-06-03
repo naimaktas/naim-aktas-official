@@ -155,7 +155,6 @@ function HeroPlayer() {
       <div className="flex-[2.3] flex flex-col relative rounded-xl overflow-hidden border border-[oklch(0.75_0.18_45/20%)] shadow-[0_0_40px_oklch(0.75_0.18_45/15%)]">
         <div className="relative aspect-video bg-black flex-1">
           {playing ? (
-           {playing ? (
             <iframe
               key={currentTrack.youtubeId}
               src={`https://www.youtube.com/embed/${currentTrack.youtubeId}?autoplay=1&rel=0&modestbranding=1&mute=${isMuted ? 1 : 0}`}
