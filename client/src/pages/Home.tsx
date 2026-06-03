@@ -138,9 +138,10 @@ function HeroCanvas() {
 
 // ── Medya Alanı: Video (Orta) + Liste (Sağ) ─────────────────────────────────────
 function HeroPlayer() {
-  const videoTracks = tracks.filter((t) => t.youtubeId).slice(0, 75);
+  const videoTracks = tracks.filter((t) => t.youtubeId).slice(0, 75); // Listenin dolması için 75 yaptık
   const [current, setCurrent] = useState(0);
   const [playing, setPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false); // <-- İstediğimiz satırı buraya ekledik
 
   if (videoTracks.length === 0) return null;
 
@@ -154,9 +155,10 @@ function HeroPlayer() {
       <div className="flex-[2.3] flex flex-col relative rounded-xl overflow-hidden border border-[oklch(0.75_0.18_45/20%)] shadow-[0_0_40px_oklch(0.75_0.18_45/15%)]">
         <div className="relative aspect-video bg-black flex-1">
           {playing ? (
+           {playing ? (
             <iframe
               key={currentTrack.youtubeId}
-              src={`https://www.youtube.com/embed/${currentTrack.youtubeId}?autoplay=1&rel=0&modestbranding=1`}
+              src={`https://www.youtube.com/embed/${currentTrack.youtubeId}?autoplay=1&rel=0&modestbranding=1&mute=${isMuted ? 1 : 0}`}
               className="absolute inset-0 w-full h-full"
               allow="autoplay; encrypted-media"
               allowFullScreen
@@ -184,21 +186,26 @@ function HeroPlayer() {
         </div>
 
         {/* Şu an çalan bilgisi */}
-        <div className="bg-[oklch(0.10_0.015_265/95%)] px-4 py-3 flex items-center justify-between border-t border-[oklch(0.75_0.18_45/15%)] shrink-0">
-          <div className="flex items-center gap-2 min-w-0">
-            <Volume2 className="w-3.5 h-3.5 text-[oklch(0.75_0.18_45)] shrink-0" />
-            <span className="text-xs text-[oklch(0.80_0.005_65)] truncate" style={{ fontFamily: "'Cinzel', serif" }}>
-              {currentTrack.title}
-            </span>
-          </div>
-          <button
-            onClick={() => { next(); setPlaying(false); }}
-            className="ml-2 p-1 rounded hover:text-[oklch(0.75_0.18_45)] text-[oklch(0.50_0.01_265)] transition-colors shrink-0"
-          >
-            <SkipForward className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
+        <div className="bg-[oklch(0.10_0.015_265/95%)] px-4 py-3 flex items-center justify-between border-t border-[oklch(0.75_0.18_45/15%)] shrink-0">
+          <div className="flex items-center gap-2 min-w-0">
+            <button 
+              onClick={() => setIsMuted(!isMuted)} 
+              className="p-1 rounded hover:bg-[oklch(1_0_0/5%)] transition-colors"
+            >
+              <Volume2 className={`w-3.5 h-3.5 shrink-0 transition-colors ${isMuted ? "text-red-500 opacity-50" : "text-[oklch(0.75_0.18_45)]"}`} />
+            </button>
+            <span className="text-xs text-[oklch(0.80_0.005_65)] truncate" style={{ fontFamily: "'Cinzel', serif" }}>
+              {currentTrack.title}
+            </span>
+          </div>
+          <button
+            onClick={() => { next(); setPlaying(false); }}
+            className="ml-2 p-1 rounded hover:text-[oklch(0.75_0.18_45)] text-[oklch(0.50_0.01_265)] transition-colors shrink-0"
+          >
+            <SkipForward className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
 
      {/* Mini liste (Sağ) */}
       <div className="flex-1 md:max-w-[320px] flex flex-col gap-1 max-h-[320px] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
