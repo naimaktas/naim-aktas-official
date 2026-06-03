@@ -166,8 +166,8 @@ export default defineConfig({
   // Vite'a HTML'i ve kaynak dosyaları nerede arayacağını kesin olarak söylüyoruz
   root: path.resolve(PROJECT_ROOT, "client"),
   build: {
-    // Çıktıyı doğrudan en dıştaki ana dist klasörüne atıyoruz
-    outDir: path.resolve(PROJECT_ROOT, "dist"),
+    // Çıktıyı doğrudan ana dist klasörünün içindeki public klasörüne atıyoruz
+    outDir: path.resolve(PROJECT_ROOT, "dist/public"),
     emptyOutDir: true,
   },
   server: {
