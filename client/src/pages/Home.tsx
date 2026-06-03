@@ -217,30 +217,35 @@ function HeroPlayer() {
         })}
       </div>
 
+      {/* Şu an çalan bilgisi — Alt Bar (Fonksiyonun içine taşındı) */}
+      <div className="absolute -bottom-16 left-0 right-0 bg-[oklch(0.18_0.015_265/95%)] px-4 py-3 flex items-center justify-between border-t border-[oklch(0.75_0.18_45/15%)] shrink-0 w-full rounded-b-xl">
+        <div className="flex items-center gap-2 min-w-0">
+          <button
+            onClick={() => setIsMuted(!isMuted)}
+            className="p-1 rounded hover:bg-[oklch(1_0_0/5%)] transition-colors"
+          >
+            {isMuted ? (
+              <span className="text-red-500 opacity-50 text-xs">🔇</span>
+            ) : (
+              <span className="text-[oklch(0.75_0.18_45)] text-xs">🔊</span>
+            )}
+          </button>
+          <span className="text-xs text-[oklch(0.88_0.005_65)] truncate" style={{ fontFamily: "'Cinzel', serif" }}>
+            {currentTrack.title}
+          </span>
+        </div>
+        
+        <button
+          onClick={() => { next(); setPlaying(false); }}
+          className="p-1 rounded hover:text-[oklch(0.75_0.18_45)] text-[oklch(0.50_0.01_265)] transition-colors shrink-0 text-sm"
+        >
+          Next ▶▶
+        </button>
+      </div>
+
     </div>
   );
-
-        {/* Şu an çalan bilgisi */}
-        <div className="bg-[oklch(0.10_0.015_265/95%)] px-4 py-3 flex items-center justify-between border-t border-[oklch(0.75_0.18_45/15%)] shrink-0">
-          <div className="flex items-center gap-2 min-w-0">
-            <button 
-              onClick={() => setIsMuted(!isMuted)} 
-              className="p-1 rounded hover:bg-[oklch(1_0_0/5%)] transition-colors"
-            >
-              <Volume2 className={`w-3.5 h-3.5 shrink-0 transition-colors ${isMuted ? "text-red-500 opacity-50" : "text-[oklch(0.75_0.18_45)]"}`} />
-            </button>
-            <span className="text-xs text-[oklch(0.80_0.005_65)] truncate" style={{ fontFamily: "'Cinzel', serif" }}>
-              {currentTrack.title}
-            </span>
-          </div>
-          <button
-            onClick={() => { next(); setPlaying(false); }}
-            className="ml-2 p-1 rounded hover:text-[oklch(0.75_0.18_45)] text-[oklch(0.50_0.01_265)] transition-colors shrink-0"
-          >
-            <SkipForward className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
+}
 
      {/* Mini liste (Sağ) - Kademeli Solma Efektli */}
       <div className="flex-1 md:max-w-[320px] flex flex-col gap-1.5 self-start w-full">
