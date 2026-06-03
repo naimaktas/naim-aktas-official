@@ -149,10 +149,10 @@ function HeroPlayer() {
   const next = () => setCurrent((c) => (c + 1) % videoTracks.length);
 
   return (
-    <div className="relative z-10 flex flex-col md:flex-row gap-4 w-full h-full items-stretch justify-center">
+    <div className="relative z-10 flex flex-col md:flex-row gap-4 w-full h-full items-stretch justify-start">
       
       {/* Video ekranı (Orta) */}
-      <div className="flex-[2.3] flex flex-col relative rounded-xl overflow-hidden border border-[oklch(0.75_0.18_45/20%)] shadow-[0_0_40px_oklch(0.75_0.18_45/15%)]">
+      <div className="flex-[3] flex flex-col relative rounded-xl overflow-hidden border border-[oklch(0.75_0.18_45/20%)] shadow-[0_0_40px_oklch(0.75_0.18_45/15%)]">
         <div className="relative aspect-video bg-black flex-1">
           {playing ? (
             <iframe
