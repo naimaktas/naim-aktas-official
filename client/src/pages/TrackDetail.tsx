@@ -115,7 +115,6 @@ export default function TrackDetail() {
         </div>
 
         <div className="container -mt-24 relative z-10 pb-16">
-          {/* GÜNCELLEME: Grid yapısı items-stretch kalıp sütunların dikey boyunu eşit tutacak */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main content */}
             <div className="lg:col-span-2">
@@ -142,7 +141,7 @@ export default function TrackDetail() {
               {track.youtubeId ? (
                 <div className="relative rounded-2xl overflow-hidden bg-[oklch(0.05_0.01_265)] border border-[oklch(1_0_0/8%)] mb-8">
                   {!playing ? (
-                    <div className="relative aspect-video w-full">
+                    <div className="relative aspect-video">
                       <img
                         src={thumbnail}
                         alt={track.title}
@@ -168,13 +167,13 @@ export default function TrackDetail() {
                       </div>
                     </div>
                   ) : (
-                    <div className="relative aspect-video w-full">
+                    <div className="aspect-video">
                       <iframe
                         src={`https://www.youtube.com/embed/${track.youtubeId}?autoplay=1&rel=0&modestbranding=1`}
                         title={track.title}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
-                        className="absolute inset-0 w-full h-full"
+                        className="w-full h-full"
                       />
                     </div>
                   )}
@@ -184,15 +183,6 @@ export default function TrackDetail() {
                   <div className="flex flex-col items-center gap-4 py-8">
                     <WaveformBars count={24} className="h-16 w-full" />
                     <p className="text-[oklch(0.45_0.01_265)] text-sm">Video yakında eklenecek</p>
-                    <a
-                      href={track.blogUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-xs text-[oklch(0.75_0.18_45)] hover:text-[oklch(0.85_0.2_45)] transition-colors"
-                    >
-                      <ExternalLink className="w-3 h-3" />
-                      Orijinal sayfayı görüntüle
-                    </a>
                   </div>
                 </div>
               )}
@@ -210,16 +200,7 @@ export default function TrackDetail() {
                     YouTube'da Aç
                   </a>
                 )}
-                <a
-                  href={track.blogUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-2.5 border border-[oklch(1_0_0/15%)] text-[oklch(0.65_0.01_265)] rounded-full text-sm hover:border-[oklch(0.75_0.18_45/40%)] hover:text-[oklch(0.85_0.005_65)] active:scale-[0.97] transition-all duration-200"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  Orijinal Kayıt
-                </a>
-              </div>
+                </div>
 
               {/* Prev/Next navigation */}
               <div className="flex gap-4">
@@ -253,8 +234,7 @@ export default function TrackDetail() {
             </div>
 
             {/* Sidebar - Related tracks */}
-            {/* GÜNCELLEME: h-full eklenerek sağ sütunun dikey esnemesi sağlandı */}
-            <div className="lg:col-span-1 h-full">
+            <div className="lg:col-span-1">
               <div className="sticky top-24">
                 <h3
                   className="text-sm font-semibold text-[oklch(0.65_0.01_265)] mb-4 tracking-wider uppercase"
@@ -307,3 +287,6 @@ export default function TrackDetail() {
     </div>
   );
 }
+
+                 
+                 
