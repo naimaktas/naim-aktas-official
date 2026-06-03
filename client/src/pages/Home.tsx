@@ -201,7 +201,7 @@ function HeroPlayer() {
       </div>
 
       {/* Mini liste (Sağ) */}
-      <div className="flex-1 md:max-w-[280px] flex flex-col gap-1 max-h-[300px] overflow-y-auto pr-1">
+      <div className="flex-1 md:max-w-[280px] flex flex-col gap-1 max-h-[300px] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {videoTracks.slice(0, 75).map((track, i) => (
           <button
             key={track.id}
