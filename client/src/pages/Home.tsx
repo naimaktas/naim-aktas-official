@@ -200,8 +200,8 @@ function HeroPlayer() {
         </div>
       </div>
 
-      {/* Mini liste (Sağ) */}
-      <div className="flex-1 md:max-w-[280px] flex flex-col gap-1 max-h-[300px] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+     {/* Mini liste (Sağ) */}
+      <div className="flex-1 md:max-w-[320px] flex flex-col gap-1 max-h-[320px] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {videoTracks.slice(0, 75).map((track, i) => (
           <button
             key={track.id}
@@ -212,10 +212,10 @@ function HeroPlayer() {
                 : "hover:bg-[oklch(1_0_0/5%)] border border-transparent"
             }`}
           >
-            <span className={`text-[10px] font-mono shrink-0 w-5 text-right ${i === current ? "text-[oklch(0.75_0.18_45)]" : "text-[oklch(0.35_0.01_265)]"}`}>
+            <span className={`text-xs font-mono shrink-0 w-5 text-right ${i === current ? "text-[oklch(0.75_0.18_45)]" : "text-[oklch(0.55_0.01_265)]"}`}>
               {i === current ? "▶" : String(i + 1).padStart(2, "0")}
             </span>
-            <span className={`text-xs truncate ${i === current ? "text-[oklch(0.90_0.005_65)]" : "text-[oklch(0.55_0.01_265)]"}`}
+            <span className={`text-sm truncate ${i === current ? "text-[oklch(0.90_0.005_65)]" : "text-[oklch(0.75_0.01_265)]"}`}
               style={{ fontFamily: "'Cinzel', serif" }}>
               {track.title}
             </span>
