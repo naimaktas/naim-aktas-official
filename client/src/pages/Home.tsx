@@ -150,7 +150,7 @@ function HeroPlayer() {
 
   return (
     <div className="relative z-10 flex flex-col md:flex-row gap-4 w-full items-end justify-start">
-      {/* 1. ANA BÖLÜM: VİDEO */}
+      {/* Video Ekranı */}
       <div className="flex-[2.2] flex flex-col relative rounded-xl overflow-hidden border border-[oklch(0.75_0.18_45/20%)] shadow-[0_0_40px_oklch(0.75_0.18_45/15%)] aspect-video bg-black">
         {playing ? (
           <iframe
@@ -179,7 +179,7 @@ function HeroPlayer() {
         )}
       </div>
 
-      {/* 2. ANA BÖLÜM: LİSTE VE ALT BAR */}
+      {/* Sağ Liste ve Alt Bar (Hepsi tek div içinde) */}
       <div className="flex-1 md:max-w-[320px] flex flex-col gap-1.5 self-start w-full">
         {videoTracks.map((track, i) => {
           const diff = i - current;
@@ -197,7 +197,7 @@ function HeroPlayer() {
           );
         })}
 
-        {/* Alt Bar da bu sarmalayıcının içinde kalmalı */}
+        {/* Alt Bar */}
         <div className="mt-4 bg-[oklch(0.18_0.015_265/95%)] px-4 py-3 flex items-center justify-between border-t border-[oklch(0.75_0.18_45/15%)] rounded-xl">
            <button onClick={() => setIsMuted(!isMuted)} className="text-xs">
              {isMuted ? "🔇" : "🔊"}
