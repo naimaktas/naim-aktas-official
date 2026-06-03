@@ -150,7 +150,7 @@ function HeroPlayer() {
 
   return (
     <div className="relative z-10 flex flex-col md:flex-row gap-4 w-full items-end justify-start">
-      {/* Video Ekranı */}
+      {/* 1. ANA BÖLÜM: VİDEO */}
       <div className="flex-[2.2] flex flex-col relative rounded-xl overflow-hidden border border-[oklch(0.75_0.18_45/20%)] shadow-[0_0_40px_oklch(0.75_0.18_45/15%)] aspect-video bg-black">
         {playing ? (
           <iframe
@@ -179,42 +179,31 @@ function HeroPlayer() {
         )}
       </div>
 
-      {/* Şarkı Listesi */}
+      {/* 2. ANA BÖLÜM: LİSTE VE ALT BAR */}
       <div className="flex-1 md:max-w-[320px] flex flex-col gap-1.5 self-start w-full">
         {videoTracks.map((track, i) => {
           const diff = i - current;
           if (diff < 0 || diff > 4) return null;
-          
           const opacityClass = diff === 0 ? "opacity-100" : diff === 1 ? "opacity-70" : diff === 2 ? "opacity-40" : "opacity-15";
-
           return (
             <button
               key={track.id}
               onClick={() => { setCurrent(i); setPlaying(true); }}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all duration-300 ${opacityClass} ${
-                i === current ? "bg-[oklch(0.75_0.18_45/18%)] border border-[oklch(0.75_0.18_45/35%)] scale-[1.02]" : "hover:bg-[oklch(1_0_0/5%)]"
-              }`}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all duration-300 ${opacityClass}`}
             >
-              <span className={`text-xs font-mono w-5 ${i === current ? "text-[oklch(0.75_0.18_45)]" : "text-[oklch(0.55_0.01_265)]"}`}>
-                {i === current ? "▶" : String(i + 1).padStart(2, "0")}
-              </span>
+              <span className="text-xs font-mono">{i === current ? "▶" : String(i + 1).padStart(2, "0")}</span>
               <span className="text-sm truncate" style={{ fontFamily: "'Cinzel', serif" }}>{track.title}</span>
             </button>
           );
         })}
-      </div>
 
-      {/* Alt Bar */}
-      <div className="absolute -bottom-16 left-0 right-0 bg-[oklch(0.18_0.015_265/95%)] px-4 py-3 flex items-center justify-between border-t border-[oklch(0.75_0.18_45/15%)] rounded-b-xl">
-        <div className="flex items-center gap-2">
-          <button onClick={() => setIsMuted(!isMuted)} className="p-1 hover:bg-[oklch(1_0_0/5%)] rounded">
-            {isMuted ? "🔇" : "🔊"}
-          </button>
-          <span className="text-xs truncate" style={{ fontFamily: "'Cinzel', serif" }}>{currentTrack.title}</span>
+        {/* Alt Bar da bu sarmalayıcının içinde kalmalı */}
+        <div className="mt-4 bg-[oklch(0.18_0.015_265/95%)] px-4 py-3 flex items-center justify-between border-t border-[oklch(0.75_0.18_45/15%)] rounded-xl">
+           <button onClick={() => setIsMuted(!isMuted)} className="text-xs">
+             {isMuted ? "🔇" : "🔊"}
+           </button>
+           <button onClick={() => { next(); setPlaying(false); }} className="text-xs">Next ▶▶</button>
         </div>
-        <button onClick={() => { next(); setPlaying(false); }} className="text-sm text-[oklch(0.50_0.01_265)] hover:text-[oklch(0.75_0.18_45)]">
-          Next ▶▶
-        </button>
       </div>
     </div>
   );
