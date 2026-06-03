@@ -492,7 +492,7 @@ export default function Home() {
             </div>
 
             {/* ORTA VE SAĞ BİRLEŞİK — Medya Player ve Liste */}
-            <div className="w-full lg:w-[52%] xl:w-[55%] reveal" style={{ animationDelay: "200ms" }}>
+            <div className="w-full lg:w-[54%] xl:w-[58%] reveal" style={{ animationDelay: "200ms" }}>
               <HeroPlayer />
             </div>
           </div>
