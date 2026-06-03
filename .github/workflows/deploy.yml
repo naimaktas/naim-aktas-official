@@ -27,7 +27,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: 9
+          version: "9"
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -39,7 +39,7 @@ jobs:
         run: pnpm install
 
       - name: Build Client
-        run: pnpm run build
+        run: pnpm run build:pages
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
