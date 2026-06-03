@@ -152,19 +152,22 @@ function viteProxy(): Plugin {
 const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), viteProxy()];
 
 export default defineConfig({
-  base: '/naimaktas-official/',
+  // GitHub Pages alt klasör yapısı için zorunlu ayar
+  base: "/naimaktas-official/",
   plugins,
   resolve: {
     alias: {
-      "@": path.resolve(import.meta.dirname, "client", "src"),
-      "@shared": path.resolve(import.meta.dirname, "shared"),
-      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
+      "@": path.resolve(PROJECT_ROOT, "client", "src"),
+      "@shared": path.resolve(PROJECT_ROOT, "shared"),
+      "@assets": path.resolve(PROJECT_ROOT, "attached_assets"),
     },
   },
-  envDir: path.resolve(import.meta.dirname),
-  root: path.resolve(import.meta.dirname, "client"),
+  envDir: PROJECT_ROOT,
+  // Vite'a HTML'i ve kaynak dosyaları nerede arayacağını kesin olarak söylüyoruz
+  root: path.resolve(PROJECT_ROOT, "client"),
   build: {
-    outDir: "dist",
+    // Çıktıyı doğrudan en dıştaki ana dist klasörüne atıyoruz
+    outDir: path.resolve(PROJECT_ROOT, "dist"),
     emptyOutDir: true,
   },
   server: {
