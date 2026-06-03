@@ -27,7 +27,7 @@ function App() {
         <TooltipProvider>
           <Toaster />
           {/* Kitabına uygun standart alt klasör yönlendirmesi */}
-          <WouterRouter base="/naimaktas-official">
+          <WouterRouter base="/naim-aktas-official">
             <Router />
           </WouterRouter>
         </TooltipProvider>
