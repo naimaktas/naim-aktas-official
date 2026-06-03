@@ -33,10 +33,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install
 
       - name: Build Client
         run: pnpm run build:pages
@@ -47,7 +46,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Sadece statik web dosyalarının biriktiği klasörü yüklüyoruz
           path: 'dist/public'
 
       - name: Deploy to GitHub Pages
