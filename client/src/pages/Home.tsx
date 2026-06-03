@@ -1,8 +1,7 @@
 /**
  * DESIGN: "Velvet Underground" — Cinematic Dark Luxury
  * - PlayStation menü tarzı güçlü akan dalgalar
- * - 2 kolonlu hero: sol içerik + sağ medya player
- * - Sıkışık layout, yamuk olmayan başlık
+ * - 3 kolonlu hero hissi: sol içerik + orta video + sağ liste
  */
 import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
@@ -24,7 +23,6 @@ function HeroCanvas() {
     if (!ctx) return;
 
     const waves = [
-      // Geniş, gösterişli ana dalgalar — ekranı tam kesen yaylar
       { amp: 140, freq: .0028, speed: .007,  phase: 0.0,  yR: .52, col: "rgba(215,148,28,0.62)", w: 2.4 },
       { amp: 100, freq: .0044, speed: .011,  phase: 1.9,  yR: .45, col: "rgba(255,180,52,0.46)", w: 1.7 },
       { amp: 175, freq: .0020, speed: .005,  phase: 3.2,  yR: .58, col: "rgba(178,118,18,0.40)", w: 3.2 },
@@ -37,7 +35,6 @@ function HeroCanvas() {
       { amp:  38, freq: .0138, speed: .025,  phase: 1.4,  yR: .43, col: "rgba(255,208,75,0.18)", w: 0.8 },
       { amp:  85, freq: .0055, speed: .011,  phase: 3.5,  yR: .60, col: "rgba(200,135,29,0.26)", w: 1.6 },
       { amp:  55, freq: .0092, speed: .017,  phase: 0.8,  yR: .38, col: "rgba(250,182,58,0.19)", w: 1.1 },
-      // Ekstra üst ve alt sınır dalgaları — tam görünürlük
       { amp:  60, freq: .0035, speed: .009,  phase: 5.1,  yR: .22, col: "rgba(200,140,25,0.20)", w: 1.5 },
       { amp:  55, freq: .0030, speed: .008,  phase: 2.3,  yR: .80, col: "rgba(190,128,22,0.18)", w: 1.4 },
     ];
@@ -57,7 +54,6 @@ function HeroCanvas() {
 
     const drawBigGlow = () => {
       const W = canvas.width, H = canvas.height;
-      // Ana büyük ışık — merkez sağda
       const gx = W * .65 + Math.sin(t * .004) * W * .06;
       const gy = H * .50 + Math.cos(t * .006) * H * .07;
       const p  = .36 + .15 * Math.sin(t * .011);
@@ -68,7 +64,6 @@ function HeroCanvas() {
       g1.addColorStop(1,    "rgba(0,0,0,0)");
       ctx.fillStyle = g1; ctx.fillRect(0, 0, W, H);
 
-      // Sağ alt
       const gx2 = W * .82 + Math.sin(t * .007 + 1) * W * .04;
       const gy2 = H * .74 + Math.cos(t * .005 + 2) * H * .08;
       const p2  = .22 + .10 * Math.sin(t * .014 + 1.5);
@@ -78,7 +73,6 @@ function HeroCanvas() {
       g2.addColorStop(1,   "rgba(0,0,0,0)");
       ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
 
-      // Sağ üst — daha parlak
       const gx3 = W * .88 + Math.sin(t * .009 + 3) * W * .03;
       const gy3 = H * .12 + Math.sin(t * .008) * H * .05;
       const p3  = .18 + .08 * Math.sin(t * .017);
@@ -87,7 +81,6 @@ function HeroCanvas() {
       g3.addColorStop(1,   "rgba(0,0,0,0)");
       ctx.fillStyle = g3; ctx.fillRect(0, 0, W, H);
 
-      // Sol-orta hafif ışık — içeriğin arkası
       const gx4 = W * .28;
       const gy4 = H * .45 + Math.sin(t * .006) * H * .04;
       const p4  = .08 + .04 * Math.sin(t * .013 + 2);
@@ -143,7 +136,7 @@ function HeroCanvas() {
   return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" />;
 }
 
-// ── Sağ taraf: YouTube Playlist Player ─────────────────────────────────────
+// ── Medya Alanı: Video (Orta) + Liste (Sağ) ─────────────────────────────────────
 function HeroPlayer() {
   const videoTracks = tracks.filter((t) => t.youtubeId).slice(0, 8);
   const [current, setCurrent] = useState(0);
@@ -155,15 +148,16 @@ function HeroPlayer() {
   const next = () => setCurrent((c) => (c + 1) % videoTracks.length);
 
   return (
-    <div className="relative z-10 flex flex-col gap-3 w-full max-w-sm">
-      {/* Video ekranı */}
-      <div className="relative rounded-xl overflow-hidden border border-[oklch(0.75_0.18_45/20%)] shadow-[0_0_40px_oklch(0.75_0.18_45/15%)]">
-        <div className="relative aspect-video bg-black">
+    <div className="relative z-10 flex flex-col md:flex-row gap-4 w-full h-full items-stretch justify-center">
+      
+      {/* Video ekranı (Orta) */}
+      <div className="flex-[1.5] flex flex-col relative rounded-xl overflow-hidden border border-[oklch(0.75_0.18_45/20%)] shadow-[0_0_40px_oklch(0.75_0.18_45/15%)]">
+        <div className="relative aspect-video bg-black flex-1">
           {playing ? (
             <iframe
               key={currentTrack.youtubeId}
               src={`https://www.youtube.com/embed/${currentTrack.youtubeId}?autoplay=1&rel=0&modestbranding=1`}
-              className="w-full h-full"
+              className="absolute inset-0 w-full h-full"
               allow="autoplay; encrypted-media"
               allowFullScreen
             />
@@ -172,7 +166,7 @@ function HeroPlayer() {
               <img
                 src={getYoutubeThumbnail(currentTrack.youtubeId!)}
                 alt={currentTrack.title}
-                className="w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${currentTrack.youtubeId}/hqdefault.jpg`;
                 }}
@@ -190,7 +184,7 @@ function HeroPlayer() {
         </div>
 
         {/* Şu an çalan bilgisi */}
-        <div className="bg-[oklch(0.10_0.015_265/95%)] px-4 py-3 flex items-center justify-between border-t border-[oklch(0.75_0.18_45/15%)]">
+        <div className="bg-[oklch(0.10_0.015_265/95%)] px-4 py-3 flex items-center justify-between border-t border-[oklch(0.75_0.18_45/15%)] shrink-0">
           <div className="flex items-center gap-2 min-w-0">
             <Volume2 className="w-3.5 h-3.5 text-[oklch(0.75_0.18_45)] shrink-0" />
             <span className="text-xs text-[oklch(0.80_0.005_65)] truncate" style={{ fontFamily: "'Cinzel', serif" }}>
@@ -206,8 +200,8 @@ function HeroPlayer() {
         </div>
       </div>
 
-      {/* Mini liste */}
-      <div className="flex flex-col gap-1">
+      {/* Mini liste (Sağ) */}
+      <div className="flex-1 md:max-w-[280px] flex flex-col gap-1 justify-center">
         {videoTracks.slice(0, 5).map((track, i) => (
           <button
             key={track.id}
@@ -392,13 +386,12 @@ export default function Home() {
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: "linear-gradient(to top, oklch(0.07 0.018 265) 0%, transparent 30%)" }} />
 
-        {/* ── 2 kolonlu içerik ── */}
+        {/* ── İçerik Alanı ── */}
         <div className="container relative z-10 pt-20 pb-10">
           <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12">
 
             {/* SOL — Başlık ve bilgiler */}
             <div className="flex-1 min-w-0">
-              {/* Etiket */}
               <div className="flex items-center gap-3 mb-4 hero-label">
                 <div className="gold-divider w-12" />
                 <span className="text-[11px] tracking-[0.32em] uppercase text-[oklch(0.75_0.18_45)] font-medium">
@@ -406,32 +399,28 @@ export default function Home() {
                 </span>
               </div>
 
-              {/* Başlık — sabit boyut, yamuk olmaz */}
               <h1 className="font-bold leading-[0.88] tracking-tight reveal" style={{ fontFamily: "'Cinzel', serif", animationDelay: "80ms" }}>
                 <span className="block title-naim" style={{ fontSize: "clamp(3.8rem, 8vw, 7rem)", color: "oklch(0.96 0.005 65)" }}>NAİM</span>
                 <span className="block text-gold-animated" style={{ fontSize: "clamp(3.8rem, 8vw, 7rem)" }}>AKTAŞ</span>
               </h1>
 
-              {/* Alt yazı — başlığa yakın */}
               <p className="text-base text-[oklch(0.58_0.01_265)] mt-3 mb-5 font-light tracking-[0.14em] reveal"
                 style={{ fontFamily: "'Raleway', sans-serif", animationDelay: "160ms" }}>
                 Türk Halk Müziği &amp; Türkü Arşivi
               </p>
 
-              {/* İstatistikler */}
               <div className="flex items-center gap-7 mb-6 reveal" style={{ animationDelay: "240ms" }}>
                 {[{ v: "71", l: "Parça" }, { v: "47", l: "Video" }, { v: "2020", l: "Yılından" }].map(({ v, l }, i) => (
-                  <>
-                    {i > 0 && <div key={`d${i}`} className="w-px h-10 bg-[oklch(1_0_0/10%)]" />}
-                    <div key={l}>
+                  <div key={l} className="flex items-center gap-7">
+                    {i > 0 && <div className="w-px h-10 bg-[oklch(1_0_0/10%)]" />}
+                    <div>
                       <div className="text-2xl font-bold text-[oklch(0.76_0.18_45)]" style={{ fontFamily: "'Cinzel', serif" }}>{v}</div>
                       <div className="text-[10px] text-[oklch(0.40_0.01_265)] tracking-[0.22em] uppercase mt-0.5">{l}</div>
                     </div>
-                  </>
+                  </div>
                 ))}
               </div>
 
-              {/* Butonlar */}
               <div className="flex flex-wrap gap-3 reveal" style={{ animationDelay: "320ms" }}>
                 <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer"
                   className="flex items-center gap-2 px-6 py-3 bg-[oklch(0.75_0.18_45)] text-[oklch(0.08_0.015_265)] rounded-full font-semibold text-sm tracking-wide hover:bg-[oklch(0.82_0.18_45)] active:scale-[0.97] transition-all duration-200">
@@ -446,8 +435,8 @@ export default function Home() {
               </div>
             </div>
 
-            {/* SAĞ — Medya Player */}
-            <div className="lg:w-80 xl:w-96 reveal" style={{ animationDelay: "200ms" }}>
+            {/* ORTA VE SAĞ BİRLEŞİK — Medya Player ve Liste */}
+            <div className="w-full lg:w-[55%] xl:w-[60%] reveal" style={{ animationDelay: "200ms" }}>
               <HeroPlayer />
             </div>
           </div>
