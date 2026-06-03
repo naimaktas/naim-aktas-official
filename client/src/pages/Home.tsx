@@ -138,7 +138,7 @@ function HeroCanvas() {
 
 // ── Medya Alanı: Video (Orta) + Liste (Sağ) ─────────────────────────────────────
 function HeroPlayer() {
-  const videoTracks = tracks.filter((t) => t.youtubeId).slice(0, 8);
+  const videoTracks = tracks.filter((t) => t.youtubeId).slice(0, 75);
   const [current, setCurrent] = useState(0);
   const [playing, setPlaying] = useState(false);
 
