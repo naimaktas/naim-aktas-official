@@ -47,8 +47,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Yeni yapıya göre derleme sonucu tam olarak burada oluşuyor
-          path: 'dist'
+          # Sadece statik web dosyalarının biriktiği klasörü yüklüyoruz
+          path: 'dist/public'
 
       - name: Deploy to GitHub Pages
         id: deployment
