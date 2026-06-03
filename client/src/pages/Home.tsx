@@ -217,18 +217,16 @@ function HeroPlayer() {
         })}
       </div>
 
-      {/* Şu an çalan bilgisi — Alt Bar (Fonksiyonun içine taşındı) */}
+      {/* Şu an çalan bilgisi — Alt Bar */}
       <div className="absolute -bottom-16 left-0 right-0 bg-[oklch(0.18_0.015_265/95%)] px-4 py-3 flex items-center justify-between border-t border-[oklch(0.75_0.18_45/15%)] shrink-0 w-full rounded-b-xl">
         <div className="flex items-center gap-2 min-w-0">
           <button
             onClick={() => setIsMuted(!isMuted)}
             className="p-1 rounded hover:bg-[oklch(1_0_0/5%)] transition-colors"
           >
-            {isMuted ? (
-              <span className="text-red-500 opacity-50 text-xs">🔇</span>
-            ) : (
-              <span className="text-[oklch(0.75_0.18_45)] text-xs">🔊</span>
-            )}
+            <span className="text-xs">
+              {isMuted ? "🔇" : "🔊"}
+            </span>
           </button>
           <span className="text-xs text-[oklch(0.88_0.005_65)] truncate" style={{ fontFamily: "'Cinzel', serif" }}>
             {currentTrack.title}
