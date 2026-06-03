@@ -149,40 +149,76 @@ function HeroPlayer() {
   const next = () => setCurrent((c) => (c + 1) % videoTracks.length);
 
   return (
-    <div className="relative z-10 flex flex-col md:flex-row gap-4 w-full h-full items-stretch justify-start">
+    <div className="relative z-10 flex flex-col md:flex-row gap-4 w-full items-end justify-start">
       
-      {/* Video ekranı (Orta) */}
-      <div className="flex-[3] flex flex-col relative rounded-xl overflow-hidden border border-[oklch(0.75_0.18_45/20%)] shadow-[0_0_40px_oklch(0.75_0.18_45/15%)]">
-        <div className="relative aspect-video bg-black flex-1">
-          {playing ? (
-            <iframe
-              key={currentTrack.youtubeId}
-              src={`https://www.youtube.com/embed/${currentTrack.youtubeId}?autoplay=1&rel=0&modestbranding=1&mute=${isMuted ? 1 : 0}`}
-              className="absolute inset-0 w-full h-full"
-              allow="autoplay; encrypted-media"
-              allowFullScreen
+      {/* Video ekranı (Orta) - flex-[2.2] ve aspect-video ile daraltılıp sol yazılara eşitlendi */}
+      <div className="flex-[2.2] flex flex-col relative rounded-xl overflow-hidden border border-[oklch(0.75_0.18_45/20%)] shadow-[0_0_40px_oklch(0.75_0.18_45/15%)] aspect-video bg-black">
+        {playing ? (
+          <iframe
+            key={currentTrack.youtubeId}
+            src={`https://www.youtube.com/embed/${currentTrack.youtubeId}?autoplay=1&rel=0&modestbranding=1&mute=${isMuted ? 1 : 0}`}
+            className="absolute inset-0 w-full h-full"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+          />
+        ) : (
+          <>
+            <img
+              src={getYoutubeThumbnail(currentTrack.youtubeId!)}
+              alt={currentTrack.title}
+              className="absolute inset-0 w-full h-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${currentTrack.youtubeId}/hqdefault.jpg`;
+              }}
             />
-          ) : (
-            <>
-              <img
-                src={getYoutubeThumbnail(currentTrack.youtubeId!)}
-                alt={currentTrack.title}
-                className="absolute inset-0 w-full h-full object-cover"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${currentTrack.youtubeId}/hqdefault.jpg`;
-                }}
-              />
-              <div className="absolute inset-0 bg-[oklch(0_0_0/30%)] flex items-center justify-center">
-                <button
-                  onClick={() => setPlaying(true)}
-                  className="w-16 h-16 rounded-full bg-[oklch(0.75_0.18_45)] flex items-center justify-center hover:bg-[oklch(0.82_0.18_45)] transition-all duration-200 shadow-[0_0_30px_oklch(0.75_0.18_45/50%)] hover:scale-105 active:scale-95"
-                >
-                  <Play className="w-7 h-7 text-[oklch(0.08_0.015_265)] fill-current ml-0.5" />
-                </button>
-              </div>
-            </>
-          )}
-        </div>
+            <div className="absolute inset-0 bg-[oklch(0_0_0/30%)] flex items-center justify-center">
+              <button
+                onClick={() => setPlaying(true)}
+                className="w-16 h-16 rounded-full bg-[oklch(0.75_0.18_45)] flex items-center justify-center hover:bg-[oklch(0.82_0.18_45)] transition-all duration-200 shadow-[0_0_30px_oklch(0.75_0.18_45/50%)] hover:scale-105 active:scale-95"
+              >
+                <Play className="w-7 h-7 text-[oklch(0.08_0.015_265)] fill-current ml-0.5" />
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Şarkı Listesi (Sağ) - justify-end ile en silik eleman tam video alt çizgisine sıfırlanır */}
+      <div className="flex-1 md:max-w-[280px] flex flex-col gap-1.5 justify-end">
+        {videoTracks.map((track, i) => {
+          const diff = i - current;
+          if (diff < 0 || diff > 3) return null;
+
+          const opacityClass = 
+            diff === 0 ? "opacity-100" :
+            diff === 1 ? "opacity-60" :
+            diff === 2 ? "opacity-25" :
+            "opacity-5"; // En silik olan parça tam alt çizgi hizasında kalır
+
+          return (
+            <button
+              key={track.id}
+              onClick={() => { setCurrent(i); setPlaying(true); }}
+              className={`flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-all duration-300 ${opacityClass} ${
+                i === current
+                  ? "bg-[oklch(0.75_0.18_45/18%)] border border-[oklch(0.75_0.18_45/35%)] shadow-[0_0_15px_oklch(0.75_0.18_45/10%)] scale-[1.02]"
+                  : "hover:bg-[oklch(1_0_0/5%)] border border-transparent hover:opacity-100"
+              }`}
+            >
+              <span className={`text-xs font-mono shrink-0 w-5 text-right ${i === current ? "text-[oklch(0.75_0.18_45)]" : "text-[oklch(0.55_0.01_265)]"}`}>
+                {i === current ? "▶" : String(i + 1).padStart(2, "0")}
+              </span>
+              <span className={`text-sm truncate ${i === current ? "text-[oklch(0.90_0.005_65)] font-medium" : "text-[oklch(0.75_0.01_265)]"}`}
+                style={{ fontFamily: "'Cinzel', serif" }}>
+                {track.title}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+    </div>
+  );
 
         {/* Şu an çalan bilgisi */}
         <div className="bg-[oklch(0.10_0.015_265/95%)] px-4 py-3 flex items-center justify-between border-t border-[oklch(0.75_0.18_45/15%)] shrink-0">
@@ -456,7 +492,7 @@ export default function Home() {
             </div>
 
             {/* ORTA VE SAĞ BİRLEŞİK — Medya Player ve Liste */}
-            <div className="w-full lg:w-[62%] xl:w-[66%] reveal" style={{ animationDelay: "200ms" }}>
+            <div className="w-full lg:w-[52%] xl:w-[55%] reveal" style={{ animationDelay: "200ms" }}>
               <HeroPlayer />
             </div>
           </div>
