@@ -179,52 +179,17 @@ function HeroPlayer() {
         )}
       </div>
 
-      {/* Sağ Liste ve Alt Bar (Hepsi tek div içinde) */}
+      {/* Sağ Liste — Kademeli Solma Efektli */}
       <div className="flex-1 md:max-w-[320px] flex flex-col gap-1.5 self-start w-full">
         {videoTracks.map((track, i) => {
           const diff = i - current;
           if (diff < 0 || diff > 4) return null;
-          const opacityClass = diff === 0 ? "opacity-100" : diff === 1 ? "opacity-70" : diff === 2 ? "opacity-40" : "opacity-15";
-          return (
-            <button
-              key={track.id}
-              onClick={() => { setCurrent(i); setPlaying(true); }}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all duration-300 ${opacityClass}`}
-            >
-              <span className="text-xs font-mono">{i === current ? "▶" : String(i + 1).padStart(2, "0")}</span>
-              <span className="text-sm truncate" style={{ fontFamily: "'Cinzel', serif" }}>{track.title}</span>
-            </button>
-          );
-        })}
-
-        {/* Alt Bar */}
-        <div className="mt-4 bg-[oklch(0.18_0.015_265/95%)] px-4 py-3 flex items-center justify-between border-t border-[oklch(0.75_0.18_45/15%)] rounded-xl">
-           <button onClick={() => setIsMuted(!isMuted)} className="text-xs">
-             {isMuted ? "🔇" : "🔊"}
-           </button>
-           <button onClick={() => { next(); setPlaying(false); }} className="text-xs">Next ▶▶</button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-     {/* Mini liste (Sağ) - Kademeli Solma Efektli */}
-      <div className="flex-1 md:max-w-[320px] flex flex-col gap-1.5 self-start w-full">
-        {videoTracks.map((track, i) => {
-          const diff = i - current;
-          
-          // Geçmiş şarkıları ve sonraki 5. şarkıdan sonrasını listeleme (Kutuyu temiz tutar)
-          if (diff < 0 || diff > 4) return null;
-
-          // Mesafeye göre opaklık (solma) dereceleri
-          const opacityClass = 
+          const opacityClass =
             diff === 0 ? "opacity-100" :
             diff === 1 ? "opacity-70" :
             diff === 2 ? "opacity-40" :
-            diff === 3 ? "opacity-15" : 
+            diff === 3 ? "opacity-15" :
             "opacity-5";
-
           return (
             <button
               key={track.id}
@@ -245,6 +210,14 @@ function HeroPlayer() {
             </button>
           );
         })}
+
+        {/* Alt Bar */}
+        <div className="mt-4 bg-[oklch(0.18_0.015_265/95%)] px-4 py-3 flex items-center justify-between border-t border-[oklch(0.75_0.18_45/15%)] rounded-xl">
+          <button onClick={() => setIsMuted(!isMuted)} className="text-xs">
+            {isMuted ? "🔇" : "🔊"}
+          </button>
+          <button onClick={() => { next(); setPlaying(false); }} className="text-xs">Next ▶▶</button>
+        </div>
       </div>
     </div>
   );
