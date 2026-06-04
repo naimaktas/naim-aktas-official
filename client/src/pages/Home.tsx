@@ -141,23 +141,34 @@ function HeroPlayer() {
   const videoTracks = tracks.filter((t) => t.youtubeId).slice(0, 75);
   const [current, setCurrent] = useState(0);
   const [playing, setPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
 
   if (videoTracks.length === 0) return null;
 
   const currentTrack = videoTracks[current];
-  const next = () => setCurrent((c) => (c + 1) % videoTracks.length);
+
+  // Sağ listede: aktif en altta, üstüne doğru sonrakiler — ters sırada render
+  const listItems = [
+    current + 4,
+    current + 3,
+    current + 2,
+    current + 1,
+    current,
+  ].filter((i) => i >= 0 && i < videoTracks.length);
 
   return (
-    <div className="relative z-10 flex flex-col md:flex-row gap-4 w-full items-end justify-start">
-      {/* Video Ekranı */}
-      <div className="flex-[2.2] flex flex-col relative rounded-xl overflow-hidden border border-[oklch(0.75_0.18_45/20%)] shadow-[0_0_40px_oklch(0.75_0.18_45/15%)] aspect-video bg-black">
+    <div className="relative z-10 flex flex-row gap-3 w-full items-stretch">
+
+      {/* ── Video Ekranı — geniş, tam yükseklik ── */}
+      <div
+        className="relative rounded-xl overflow-hidden border border-[oklch(0.75_0.18_45/22%)] shadow-[0_0_50px_rgba(0,0,0,0.6)] bg-black"
+        style={{ flex: "3.2", aspectRatio: "16/9" }}
+      >
         {playing ? (
           <iframe
             key={currentTrack.youtubeId}
-            src={`https://www.youtube.com/embed/${currentTrack.youtubeId}?autoplay=1&rel=0&modestbranding=1&mute=${isMuted ? 1 : 0}`}
+            src={`https://www.youtube.com/embed/${currentTrack.youtubeId}?autoplay=1&rel=0&modestbranding=1&showinfo=0`}
             className="absolute inset-0 w-full h-full"
-            allow="autoplay; encrypted-media"
+            allow="autoplay; encrypted-media; fullscreen"
             allowFullScreen
           />
         ) : (
@@ -166,59 +177,77 @@ function HeroPlayer() {
               src={getYoutubeThumbnail(currentTrack.youtubeId!)}
               alt={currentTrack.title}
               className="absolute inset-0 w-full h-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${currentTrack.youtubeId}/hqdefault.jpg`;
+              }}
             />
-            <div className="absolute inset-0 bg-[oklch(0_0_0/30%)] flex items-center justify-center">
-              <button
-                onClick={() => setPlaying(true)}
-                className="w-16 h-16 rounded-full bg-[oklch(0.75_0.18_45)] flex items-center justify-center hover:bg-[oklch(0.82_0.18_45)] transition-all duration-200 shadow-[0_0_30px_oklch(0.75_0.18_45/50%)] hover:scale-105 active:scale-95"
+            <div className="absolute inset-0"
+              style={{ background: "linear-gradient(to top, rgba(5,4,12,0.90) 0%, rgba(5,4,12,0.15) 55%, transparent 100%)" }} />
+            <button
+              onClick={() => setPlaying(true)}
+              className="absolute inset-0 flex items-center justify-center group"
+              aria-label="Oynat"
+            >
+              <div
+                className="rounded-full flex items-center justify-center transition-all duration-200 group-hover:scale-110 group-active:scale-95"
+                style={{
+                  width: 72, height: 72,
+                  background: "oklch(0.75 0.18 45)",
+                  animation: "playPulse 2.5s ease-in-out infinite",
+                }}
               >
-                <Play className="w-7 h-7 text-[oklch(0.08_0.015_265)] fill-current ml-0.5" />
-              </button>
+                <Play className="w-8 h-8 fill-current ml-1" style={{ color: "oklch(0.08 0.015 265)" }} />
+              </div>
+            </button>
+            <div className="absolute bottom-0 left-0 right-0 px-4 pb-3 pt-8">
+              <p className="text-[10px] tracking-[0.22em] uppercase font-medium mb-1" style={{ color: "oklch(0.75 0.18 45)" }}>Şu an çalıyor</p>
+              <p className="text-sm font-semibold leading-tight line-clamp-1" style={{ color: "oklch(0.94 0.005 65)", fontFamily: "'Cinzel', serif" }}>
+                {currentTrack.title}
+              </p>
             </div>
           </>
         )}
       </div>
 
-      {/* Sağ Liste — Kademeli Solma Efektli */}
-      <div className="flex-1 md:max-w-[320px] flex flex-col gap-1.5 self-start w-full">
-        {videoTracks.map((track, i) => {
-          const diff = i - current;
-          if (diff < 0 || diff > 4) return null;
-          const opacityClass =
-            diff === 0 ? "opacity-100" :
-            diff === 1 ? "opacity-70" :
-            diff === 2 ? "opacity-40" :
-            diff === 3 ? "opacity-15" :
-            "opacity-5";
+      {/* ── Sağ Liste — alt hizalı, yukarı doğru soluklaşır ── */}
+      <div className="flex flex-col justify-end gap-1" style={{ flex: "1", minWidth: 0 }}>
+        {listItems.map((i) => {
+          const track = videoTracks[i];
+          const diff = i - current; // 0=aktif(altta), 1-4=sonrakiler(üstte)
+          const opacity =
+            diff === 0 ? 1 :
+            diff === 1 ? 0.60 :
+            diff === 2 ? 0.35 :
+            diff === 3 ? 0.16 : 0.07;
+
           return (
             <button
               key={track.id}
               onClick={() => { setCurrent(i); setPlaying(true); }}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all duration-300 ${opacityClass} ${
-                i === current
-                  ? "bg-[oklch(0.75_0.18_45/18%)] border border-[oklch(0.75_0.18_45/35%)] shadow-[0_0_15px_oklch(0.75_0.18_45/10%)] scale-[1.02]"
-                  : "hover:bg-[oklch(1_0_0/5%)] border border-transparent hover:opacity-100"
+              style={{ opacity }}
+              className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-left transition-all duration-300 hover:opacity-100 ${
+                diff === 0
+                  ? "bg-[oklch(0.75_0.18_45/16%)] border border-[oklch(0.75_0.18_45/32%)] scale-[1.02]"
+                  : "border border-transparent hover:bg-[oklch(1_0_0/5%)]"
               }`}
             >
-              <span className={`text-xs font-mono shrink-0 w-5 text-right ${i === current ? "text-[oklch(0.75_0.18_45)]" : "text-[oklch(0.55_0.01_265)]"}`}>
-                {i === current ? "▶" : String(i + 1).padStart(2, "0")}
+              <span className="text-[10px] font-mono shrink-0 w-5 text-right"
+                style={{ color: diff === 0 ? "oklch(0.75 0.18 45)" : "oklch(0.45 0.01 265)" }}>
+                {diff === 0 ? "▶" : String(i + 1).padStart(2, "0")}
               </span>
-              <span className={`text-sm truncate ${i === current ? "text-[oklch(0.90_0.005_65)] font-medium" : "text-[oklch(0.75_0.01_265)]"}`}
-                style={{ fontFamily: "'Cinzel', serif" }}>
+              <span className="text-xs leading-tight line-clamp-2 flex-1"
+                style={{
+                  fontFamily: "'Cinzel', serif",
+                  color: diff === 0 ? "oklch(0.92 0.005 65)" : "oklch(0.68 0.01 265)",
+                  fontWeight: diff === 0 ? 600 : 400,
+                }}>
                 {track.title}
               </span>
             </button>
           );
         })}
-
-        {/* Alt Bar */}
-        <div className="mt-4 bg-[oklch(0.18_0.015_265/95%)] px-4 py-3 flex items-center justify-between border-t border-[oklch(0.75_0.18_45/15%)] rounded-xl">
-          <button onClick={() => setIsMuted(!isMuted)} className="text-xs">
-            {isMuted ? "🔇" : "🔊"}
-          </button>
-          <button onClick={() => { next(); setPlaying(false); }} className="text-xs">Next ▶▶</button>
-        </div>
       </div>
+
     </div>
   );
 }
