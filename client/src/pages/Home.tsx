@@ -151,7 +151,9 @@ function HeroPlayer() {
     if (!listRef.current || !activeRef.current) return;
     const list = listRef.current;
     const item = activeRef.current;
-    list.scrollTo({ top: item.offsetTop - list.clientHeight / 2 + item.clientHeight / 2, behavior: "smooth" });
+    // item.offsetTop zaten "50% spacer" sonrası — aktif öğeyi listenin tam ortasına kaydır
+    const scrollTo = item.offsetTop - list.clientHeight / 2 + item.clientHeight / 2;
+    list.scrollTo({ top: scrollTo, behavior: "smooth" });
   }, [current]);
 
   return (
@@ -160,7 +162,7 @@ function HeroPlayer() {
       {/* ── Video: 75% genişlik ── */}
       <div
         className="relative rounded-xl overflow-hidden border border-[oklch(0.75_0.18_45/22%)] shadow-[0_0_50px_rgba(0,0,0,0.65)] bg-black shrink-0"
-        style={{ width: "75%", aspectRatio: "16/9" }}
+        style={{ width: "72%", aspectRatio: "16/9" }}
       >
         {playing ? (
           <iframe
@@ -199,19 +201,16 @@ function HeroPlayer() {
         )}
       </div>
 
-      {/* ── Sağ: Scrollable liste, player ile aynı yükseklikte ── */}
-      <div className="flex-1 min-w-0 relative overflow-hidden">
-        {/* Üst sis */}
-        <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none" style={{
-          height: 44,
-          background: "linear-gradient(to bottom, oklch(0.07 0.018 265) 0%, transparent 100%)",
-        }}/>
-        {/* Liste — absolute inset, tam yükseklik scroll */}
+      {/* ── Sağ: Scrollable liste ── */}
+      <div className="relative overflow-hidden" style={{ width: "28%" }}>
         <div
           ref={listRef}
-          className="absolute inset-0 overflow-y-auto flex flex-col gap-0.5 py-3 px-1"
+          className="absolute inset-0 overflow-y-auto flex flex-col gap-0.5 px-1"
           style={{ scrollbarWidth:"none", msOverflowStyle:"none" }}
         >
+          {/* Üst boşluk — aktif şarkının player ortasına hizalanması için */}
+          <div style={{ flex: "0 0 auto", height: "50%" }} />
+
           {videoTracks.map((track, i) => {
             const dist = Math.abs(i - current);
             const opacity = dist === 0 ? 1 : dist === 1 ? 0.60 : dist === 2 ? 0.32 : dist === 3 ? 0.15 : 0.06;
@@ -222,17 +221,17 @@ function HeroPlayer() {
                 ref={isActive ? activeRef : null}
                 onClick={() => { setCurrent(i); setPlaying(true); }}
                 style={{ opacity, transition: "opacity 0.3s, transform 0.3s" }}
-                className={`flex items-center gap-2 px-2.5 py-2 rounded-lg text-left w-full hover:opacity-100 shrink-0 ${
+                className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left w-full hover:opacity-100 shrink-0 ${
                   isActive
                     ? "bg-[oklch(0.75_0.18_45/15%)] border border-[oklch(0.75_0.18_45/30%)]"
                     : "border border-transparent hover:bg-[oklch(1_0_0/5%)]"
                 }`}
               >
-                <span className="text-[9px] font-mono shrink-0 w-4 text-right"
+                <span className="text-[10px] font-mono shrink-0 w-5 text-right"
                   style={{ color: isActive ? "oklch(0.75 0.18 45)" : "oklch(0.38 0.01 265)" }}>
                   {isActive ? "▶" : String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="text-[11px] leading-snug line-clamp-2 flex-1"
+                <span className="text-xs leading-snug line-clamp-2 flex-1"
                   style={{
                     fontFamily: "'Cinzel',serif",
                     color: isActive ? "oklch(0.92 0.005 65)" : "oklch(0.62 0.01 265)",
@@ -243,12 +242,10 @@ function HeroPlayer() {
               </button>
             );
           })}
+
+          {/* Alt boşluk */}
+          <div style={{ flex: "0 0 auto", height: "50%" }} />
         </div>
-        {/* Alt sis */}
-        <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none" style={{
-          height: 44,
-          background: "linear-gradient(to top, oklch(0.07 0.018 265) 0%, transparent 100%)",
-        }}/>
       </div>
 
     </div>
