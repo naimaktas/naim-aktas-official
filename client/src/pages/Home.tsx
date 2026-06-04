@@ -136,37 +136,36 @@ function HeroCanvas() {
   return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" />;
 }
 
-// ── Medya Alanı: Video (Orta) + Liste (Sağ) ─────────────────────────────────────
+// ── Medya Alanı: Video + Scrollable Liste ────────────────────────────────────
 function HeroPlayer() {
   const videoTracks = tracks.filter((t) => t.youtubeId).slice(0, 75);
   const [current, setCurrent] = useState(0);
   const [playing, setPlaying] = useState(false);
+  const listRef   = useRef<HTMLDivElement>(null);
+  const activeRef = useRef<HTMLButtonElement>(null);
 
   if (videoTracks.length === 0) return null;
+  const cur = videoTracks[current];
 
-  const currentTrack = videoTracks[current];
-
-  // Sağ listede: aktif en altta, üstüne doğru sonrakiler — ters sırada render
-  const listItems = [
-    current + 4,
-    current + 3,
-    current + 2,
-    current + 1,
-    current,
-  ].filter((i) => i >= 0 && i < videoTracks.length);
+  useEffect(() => {
+    if (!listRef.current || !activeRef.current) return;
+    const list = listRef.current;
+    const item = activeRef.current;
+    list.scrollTo({ top: item.offsetTop - list.clientHeight / 2 + item.clientHeight / 2, behavior: "smooth" });
+  }, [current]);
 
   return (
-    <div className="relative z-10 flex flex-row gap-3 w-full items-stretch">
+    <div className="flex flex-row gap-3 w-full items-stretch">
 
-      {/* ── Video Ekranı — geniş, tam yükseklik ── */}
+      {/* ── Video: 75% genişlik ── */}
       <div
-        className="relative rounded-xl overflow-hidden border border-[oklch(0.75_0.18_45/22%)] shadow-[0_0_50px_rgba(0,0,0,0.6)] bg-black"
-        style={{ flex: "3.2", aspectRatio: "16/9" }}
+        className="relative rounded-xl overflow-hidden border border-[oklch(0.75_0.18_45/22%)] shadow-[0_0_50px_rgba(0,0,0,0.65)] bg-black shrink-0"
+        style={{ width: "75%", aspectRatio: "16/9" }}
       >
         {playing ? (
           <iframe
-            key={currentTrack.youtubeId}
-            src={`https://www.youtube.com/embed/${currentTrack.youtubeId}?autoplay=1&rel=0&modestbranding=1&showinfo=0`}
+            key={cur.youtubeId}
+            src={`https://www.youtube.com/embed/${cur.youtubeId}?autoplay=1&rel=0&modestbranding=1&showinfo=0`}
             className="absolute inset-0 w-full h-full"
             allow="autoplay; encrypted-media; fullscreen"
             allowFullScreen
@@ -174,78 +173,82 @@ function HeroPlayer() {
         ) : (
           <>
             <img
-              src={getYoutubeThumbnail(currentTrack.youtubeId!)}
-              alt={currentTrack.title}
+              src={getYoutubeThumbnail(cur.youtubeId!)}
+              alt={cur.title}
               className="absolute inset-0 w-full h-full object-cover"
               onError={(e) => {
-                (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${currentTrack.youtubeId}/hqdefault.jpg`;
+                (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${cur.youtubeId}/hqdefault.jpg`;
               }}
             />
             <div className="absolute inset-0"
-              style={{ background: "linear-gradient(to top, rgba(5,4,12,0.90) 0%, rgba(5,4,12,0.15) 55%, transparent 100%)" }} />
-            <button
-              onClick={() => setPlaying(true)}
-              className="absolute inset-0 flex items-center justify-center group"
-              aria-label="Oynat"
-            >
-              <div
-                className="rounded-full flex items-center justify-center transition-all duration-200 group-hover:scale-110 group-active:scale-95"
-                style={{
-                  width: 72, height: 72,
-                  background: "oklch(0.75 0.18 45)",
-                  animation: "playPulse 2.5s ease-in-out infinite",
-                }}
-              >
-                <Play className="w-8 h-8 fill-current ml-1" style={{ color: "oklch(0.08 0.015 265)" }} />
+              style={{ background: "linear-gradient(to top,rgba(5,4,12,0.92) 0%,rgba(5,4,12,0.12) 55%,transparent 100%)" }} />
+            <button onClick={() => setPlaying(true)}
+              className="absolute inset-0 flex items-center justify-center group" aria-label="Oynat">
+              <div className="rounded-full flex items-center justify-center transition-all duration-200 group-hover:scale-110 group-active:scale-95"
+                style={{ width:72, height:72, background:"oklch(0.75 0.18 45)", animation:"playPulse 2.5s ease-in-out infinite" }}>
+                <Play className="w-8 h-8 fill-current ml-1" style={{ color:"oklch(0.08 0.015 265)" }} />
               </div>
             </button>
             <div className="absolute bottom-0 left-0 right-0 px-4 pb-3 pt-8">
-              <p className="text-[10px] tracking-[0.22em] uppercase font-medium mb-1" style={{ color: "oklch(0.75 0.18 45)" }}>Şu an çalıyor</p>
-              <p className="text-sm font-semibold leading-tight line-clamp-1" style={{ color: "oklch(0.94 0.005 65)", fontFamily: "'Cinzel', serif" }}>
-                {currentTrack.title}
+              <p className="text-[10px] tracking-[0.22em] uppercase font-medium mb-1" style={{ color:"oklch(0.75 0.18 45)" }}>Şu an çalıyor</p>
+              <p className="text-sm font-semibold leading-tight line-clamp-1" style={{ color:"oklch(0.94 0.005 65)", fontFamily:"'Cinzel',serif" }}>
+                {cur.title}
               </p>
             </div>
           </>
         )}
       </div>
 
-      {/* ── Sağ Liste — alt hizalı, yukarı doğru soluklaşır ── */}
-      <div className="flex flex-col justify-end gap-1" style={{ flex: "1", minWidth: 0 }}>
-        {listItems.map((i) => {
-          const track = videoTracks[i];
-          const diff = i - current; // 0=aktif(altta), 1-4=sonrakiler(üstte)
-          const opacity =
-            diff === 0 ? 1 :
-            diff === 1 ? 0.60 :
-            diff === 2 ? 0.35 :
-            diff === 3 ? 0.16 : 0.07;
-
-          return (
-            <button
-              key={track.id}
-              onClick={() => { setCurrent(i); setPlaying(true); }}
-              style={{ opacity }}
-              className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-left transition-all duration-300 hover:opacity-100 ${
-                diff === 0
-                  ? "bg-[oklch(0.75_0.18_45/16%)] border border-[oklch(0.75_0.18_45/32%)] scale-[1.02]"
-                  : "border border-transparent hover:bg-[oklch(1_0_0/5%)]"
-              }`}
-            >
-              <span className="text-[10px] font-mono shrink-0 w-5 text-right"
-                style={{ color: diff === 0 ? "oklch(0.75 0.18 45)" : "oklch(0.45 0.01 265)" }}>
-                {diff === 0 ? "▶" : String(i + 1).padStart(2, "0")}
-              </span>
-              <span className="text-xs leading-tight line-clamp-2 flex-1"
-                style={{
-                  fontFamily: "'Cinzel', serif",
-                  color: diff === 0 ? "oklch(0.92 0.005 65)" : "oklch(0.68 0.01 265)",
-                  fontWeight: diff === 0 ? 600 : 400,
-                }}>
-                {track.title}
-              </span>
-            </button>
-          );
-        })}
+      {/* ── Sağ: Scrollable liste, player ile aynı yükseklikte ── */}
+      <div className="flex-1 min-w-0 relative overflow-hidden">
+        {/* Üst sis */}
+        <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none" style={{
+          height: 44,
+          background: "linear-gradient(to bottom, oklch(0.07 0.018 265) 0%, transparent 100%)",
+        }}/>
+        {/* Liste — absolute inset, tam yükseklik scroll */}
+        <div
+          ref={listRef}
+          className="absolute inset-0 overflow-y-auto flex flex-col gap-0.5 py-3 px-1"
+          style={{ scrollbarWidth:"none", msOverflowStyle:"none" }}
+        >
+          {videoTracks.map((track, i) => {
+            const dist = Math.abs(i - current);
+            const opacity = dist === 0 ? 1 : dist === 1 ? 0.60 : dist === 2 ? 0.32 : dist === 3 ? 0.15 : 0.06;
+            const isActive = i === current;
+            return (
+              <button
+                key={track.id}
+                ref={isActive ? activeRef : null}
+                onClick={() => { setCurrent(i); setPlaying(true); }}
+                style={{ opacity, transition: "opacity 0.3s, transform 0.3s" }}
+                className={`flex items-center gap-2 px-2.5 py-2 rounded-lg text-left w-full hover:opacity-100 shrink-0 ${
+                  isActive
+                    ? "bg-[oklch(0.75_0.18_45/15%)] border border-[oklch(0.75_0.18_45/30%)]"
+                    : "border border-transparent hover:bg-[oklch(1_0_0/5%)]"
+                }`}
+              >
+                <span className="text-[9px] font-mono shrink-0 w-4 text-right"
+                  style={{ color: isActive ? "oklch(0.75 0.18 45)" : "oklch(0.38 0.01 265)" }}>
+                  {isActive ? "▶" : String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="text-[11px] leading-snug line-clamp-2 flex-1"
+                  style={{
+                    fontFamily: "'Cinzel',serif",
+                    color: isActive ? "oklch(0.92 0.005 65)" : "oklch(0.62 0.01 265)",
+                    fontWeight: isActive ? 600 : 400,
+                  }}>
+                  {track.title}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        {/* Alt sis */}
+        <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none" style={{
+          height: 44,
+          background: "linear-gradient(to top, oklch(0.07 0.018 265) 0%, transparent 100%)",
+        }}/>
       </div>
 
     </div>
@@ -412,11 +415,11 @@ export default function Home() {
           style={{ background: "linear-gradient(to top, oklch(0.07 0.018 265) 0%, transparent 30%)" }} />
 
         {/* ── İçerik Alanı ── */}
-        <div className="container relative z-10 pt-20 pb-10">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12">
+        <div className="container relative z-10 pt-20 pb-10 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-4 lg:gap-6 items-center">
 
             {/* SOL — Başlık ve bilgiler */}
-            <div className="flex-1 min-w-0">
+            <div className="min-w-0">
               <div className="flex items-center gap-3 mb-4 hero-label">
                 <div className="gold-divider w-12" />
                 <span className="text-[11px] tracking-[0.32em] uppercase text-[oklch(0.75_0.18_45)] font-medium">
@@ -461,7 +464,7 @@ export default function Home() {
             </div>
 
             {/* ORTA VE SAĞ BİRLEŞİK — Medya Player ve Liste */}
-            <div className="w-full lg:w-[54%] xl:w-[58%] reveal" style={{ animationDelay: "200ms" }}>
+            <div className="w-full reveal" style={{ animationDelay: "200ms" }}>
               <HeroPlayer />
             </div>
           </div>
