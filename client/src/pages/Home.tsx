@@ -271,6 +271,115 @@ function WaveformBars({ count = 12, className = "" }: { count?: number; classNam
   );
 }
 
+// ── Sticky Player ──────────────────────────────────────────────────────────
+function StickyPlayer({
+  track, playing, onToggle, onClose, onNext, onPrev
+}: {
+  track: { id: number; title: string; youtubeId: string } | null;
+  playing: boolean;
+  onToggle: () => void;
+  onClose: () => void;
+  onNext: () => void;
+  onPrev: () => void;
+}) {
+  if (!track) return null;
+  return (
+    <div
+      className="fixed bottom-0 left-0 right-0 z-50 flex items-center gap-4 px-4 md:px-8 py-3 border-t border-[oklch(0.75_0.18_45/15%)]"
+      style={{ background: "oklch(0.09 0.016 265 / 96%)", backdropFilter: "blur(20px)" }}
+    >
+      {/* Thumbnail */}
+      <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 border border-[oklch(0.75_0.18_45/20%)]">
+        <img src={`https://img.youtube.com/vi/${track.youtubeId}/mqdefault.jpg`} alt={track.title} className="w-full h-full object-cover" />
+      </div>
+
+      {/* Title */}
+      <div className="flex-1 min-w-0">
+        <p className="text-xs font-medium text-[oklch(0.88_0.005_65)] truncate" style={{ fontFamily: "'Cinzel', serif" }}>
+          {track.title}
+        </p>
+        <p className="text-[10px] text-[oklch(0.42_0.01_265)]">Naim Aktaş</p>
+      </div>
+
+      {/* Controls */}
+      <div className="flex items-center gap-1 shrink-0">
+        <button onClick={onPrev} className="w-8 h-8 rounded-full flex items-center justify-center text-[oklch(0.50_0.01_265)] hover:text-[oklch(0.75_0.18_45)] hover:bg-[oklch(0.75_0.18_45/10%)] transition-all">
+          <SkipBack className="w-3.5 h-3.5" />
+        </button>
+        <button onClick={onToggle}
+          className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-105"
+          style={{ background: "oklch(0.75 0.18 45)", color: "oklch(0.08 0.015 265)" }}>
+          {playing
+            ? <span className="flex gap-[3px]"><span className="w-[3px] h-3.5 rounded-full bg-current"/><span className="w-[3px] h-3.5 rounded-full bg-current"/></span>
+            : <Play className="w-3.5 h-3.5 fill-current ml-0.5" />}
+        </button>
+        <button onClick={onNext} className="w-8 h-8 rounded-full flex items-center justify-center text-[oklch(0.50_0.01_265)] hover:text-[oklch(0.75_0.18_45)] hover:bg-[oklch(0.75_0.18_45/10%)] transition-all">
+          <SkipForward className="w-3.5 h-3.5" />
+        </button>
+      </div>
+
+      {/* YouTube link */}
+      <a href={`https://www.youtube.com/watch?v=${track.youtubeId}`} target="_blank" rel="noopener noreferrer"
+        className="shrink-0 hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-medium transition-all hover:opacity-80"
+        style={{ background: "oklch(0.75 0.18 45 / 12%)", color: "oklch(0.75 0.18 45)", border: "1px solid oklch(0.75 0.18 45 / 25%)" }}>
+        <Youtube className="w-3 h-3" /> YouTube
+      </a>
+
+      {/* Close */}
+      <button onClick={onClose} className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-[oklch(0.38_0.01_265)] hover:text-[oklch(0.65_0.01_265)] hover:bg-[oklch(1_0_0/6%)] transition-all">
+        <X className="w-3.5 h-3.5" />
+      </button>
+    </div>
+  );
+}
+
+// ── Autocomplete Search ─────────────────────────────────────────────────────
+function AutocompleteSearch({
+  value, onChange, tracks: allTracks
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  tracks: { id: number; title: string; slug: string }[];
+}) {
+  const [open, setOpen] = useState(false);
+  const suggestions = value.length > 0
+    ? allTracks.filter(t => t.title.toLowerCase().includes(value.toLowerCase())).slice(0, 6)
+    : [];
+
+  return (
+    <div className="relative w-full md:w-72">
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[oklch(0.45_0.01_265)] pointer-events-none" />
+      <input
+        type="text"
+        placeholder="Parça ara..."
+        value={value}
+        onChange={e => { onChange(e.target.value); setOpen(true); }}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setTimeout(() => setOpen(false), 150)}
+        className="w-full pl-9 pr-4 py-2 rounded-lg text-sm bg-[oklch(0.12_0.012_265)] border border-[oklch(1_0_0/10%)] text-[oklch(0.85_0.005_65)] placeholder:text-[oklch(0.35_0.01_265)] focus:border-[oklch(0.75_0.18_45/50%)] focus:outline-none transition-colors"
+      />
+      {open && suggestions.length > 0 && (
+        <div className="absolute top-full left-0 right-0 mt-1 z-50 rounded-xl border border-[oklch(1_0_0/10%)] overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.6)]"
+          style={{ background: "oklch(0.12 0.015 265)" }}>
+          {suggestions.map(t => (
+            <Link key={t.id} href={`/track/${t.slug}`}>
+              <div
+                className="flex items-center gap-3 px-4 py-2.5 hover:bg-[oklch(0.75_0.18_45/10%)] transition-colors cursor-pointer"
+                onMouseDown={() => onChange(t.title)}
+              >
+                <Search className="w-3 h-3 text-[oklch(0.45_0.01_265)] shrink-0" />
+                <span className="text-sm text-[oklch(0.80_0.005_65)] truncate" style={{ fontFamily: "'Cinzel', serif" }}>
+                  {t.title}
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Navbar ──────────────────────────────────────────────────────────────────
 function Navbar({ scrolled }: { scrolled: boolean }) {
   return (
@@ -349,10 +458,17 @@ function TrackCard({ track, index }: { track: Track; index: number }) {
 
 // ── Home Page ───────────────────────────────────────────────────────────────
 export default function Home() {
-  const [scrolled, setScrolled]         = useState(false);
-  const [searchQuery, setSearchQuery]   = useState("");
-  const [visibleCount, setVisibleCount] = useState(24);
-  const tracksRef = useRef<HTMLDivElement>(null);
+  const [scrolled, setScrolled]             = useState(false);
+  const [searchQuery, setSearchQuery]       = useState("");
+  const [visibleCount, setVisibleCount]     = useState(24);
+  const [activeCategory, setActiveCategory] = useState("tümü");
+  const [stickyPlaying, setStickyPlaying]   = useState(false);
+  const [stickyTrackIdx, setStickyTrackIdx] = useState(0);
+  const [stickyVisible, setStickyVisible]   = useState(false);
+  const tracksRef  = useRef<HTMLDivElement>(null);
+  const heroRef    = useRef<HTMLElement>(null);
+
+  const videoTracks = tracks.filter((t) => t.youtubeId);
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 60);
@@ -360,13 +476,28 @@ export default function Home() {
     return () => window.removeEventListener("scroll", h);
   }, []);
 
-  const filteredTracks  = tracks.filter((t) => t.title.toLowerCase().includes(searchQuery.toLowerCase()));
+  // Sticky player: hero bölümü ekrandan çıkınca göster
+  useEffect(() => {
+    if (!heroRef.current) return;
+    const obs = new IntersectionObserver(([e]) => setStickyVisible(!e.isIntersecting), { threshold: 0.05 });
+    obs.observe(heroRef.current);
+    return () => obs.disconnect();
+  }, []);
+
+  const categories = ["tümü", "türkü", "uzun hava", "halk müziği"];
+  const filteredTracks = tracks.filter((t) => {
+    const matchSearch = t.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchCat    = activeCategory === "tümü" || t.category === activeCategory;
+    return matchSearch && matchCat;
+  });
   const displayedTracks = filteredTracks.slice(0, visibleCount);
   const hasMore         = visibleCount < filteredTracks.length;
   const scrollToTracks  = () => tracksRef.current?.scrollIntoView({ behavior: "smooth" });
 
+  const stickyTrack = videoTracks[stickyTrackIdx] ?? null;
+
   return (
-    <div className="min-h-screen bg-[oklch(0.07_0.018_265)]">
+    <div className={`min-h-screen bg-[oklch(0.07_0.018_265)] ${stickyVisible && stickyTrack ? "pb-16" : ""}`}>
 
       <style>{`
         @keyframes goldFlow {
@@ -398,7 +529,7 @@ export default function Home() {
       <Navbar scrolled={scrolled} />
 
       {/* ── HERO ── */}
-      <section className="relative min-h-screen flex items-center overflow-hidden">
+      <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden">
         <div className="absolute inset-0 bg-[oklch(0.07_0.018_265)]" />
         <img src={HERO_BG} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover opacity-10 pointer-events-none" />
 
@@ -435,12 +566,12 @@ export default function Home() {
               </p>
 
               <div className="flex items-center gap-7 mb-6 reveal" style={{ animationDelay: "240ms" }}>
-                {[{ v: "71", l: "Parça" }, { v: "47", l: "Video" }, { v: "2020", l: "Yılından" }].map(({ v, l }, i) => (
+                {[{ v: "71", l: "Parça" }, { v: "71", l: "Video" }, { v: "2020", l: "Yılından" }].map(({ v, l }, i) => (
                   <div key={l} className="flex items-center gap-7">
                     {i > 0 && <div className="w-px h-10 bg-[oklch(1_0_0/10%)]" />}
                     <div>
-                      <div className="text-2xl font-bold text-[oklch(0.76_0.18_45)]" style={{ fontFamily: "'Cinzel', serif" }}>{v}</div>
-                      <div className="text-[10px] text-[oklch(0.40_0.01_265)] tracking-[0.22em] uppercase mt-0.5">{l}</div>
+                      <div className="text-2xl font-bold text-[oklch(0.82_0.18_45)]" style={{ fontFamily: "'Cinzel', serif" }}>{v}</div>
+                      <div className="text-[10px] text-[oklch(0.58_0.01_265)] tracking-[0.22em] uppercase mt-0.5">{l}</div>
                     </div>
                   </div>
                 ))}
@@ -484,7 +615,7 @@ export default function Home() {
                 <span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Müzik Arşivi</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)]" style={{ fontFamily: "'Cinzel', serif" }}>Tüm Parçalar</h2>
-              <p className="text-sm text-[oklch(0.45_0.01_265)] mt-2">{filteredTracks.length} parça bulundu</p>
+              <p className="text-sm text-[oklch(0.68_0.01_265)] mt-2">{filteredTracks.length} parça bulundu</p>
             </div>
             <div className="relative w-full md:w-72">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[oklch(0.45_0.01_265)]" />
@@ -492,6 +623,19 @@ export default function Home() {
                 onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(24); }}
                 className="pl-9 bg-[oklch(0.12_0.012_265)] border-[oklch(1_0_0/10%)] text-[oklch(0.85_0.005_65)] placeholder:text-[oklch(0.35_0.01_265)] focus:border-[oklch(0.75_0.18_45/50%)] focus:ring-[oklch(0.75_0.18_45/20%)]" />
             </div>
+          </div>
+          {/* Kategori filtresi */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            {categories.map((cat) => (
+              <button key={cat} onClick={() => { setActiveCategory(cat); setVisibleCount(24); }}
+                className={`px-4 py-1.5 rounded-full text-xs font-medium capitalize transition-all duration-200 ${
+                  activeCategory === cat
+                    ? "bg-[oklch(0.75_0.18_45)] text-[oklch(0.08_0.015_265)]"
+                    : "border border-[oklch(1_0_0/12%)] text-[oklch(0.55_0.01_265)] hover:border-[oklch(0.75_0.18_45/40%)] hover:text-[oklch(0.75_0.18_45)]"
+                }`}>
+                {cat}
+              </button>
+            ))}
           </div>
           <div className="gold-divider mb-12" />
           {displayedTracks.length > 0 ? (
@@ -514,6 +658,18 @@ export default function Home() {
           )}
         </div>
       </section>
+
+      {/* ── STICKY PLAYER ── */}
+      {stickyVisible && stickyTrack && (
+        <StickyPlayer
+          track={{ id: stickyTrack.id, title: stickyTrack.title, youtubeId: stickyTrack.youtubeId! }}
+          playing={stickyPlaying}
+          onToggle={() => setStickyPlaying(p => !p)}
+          onClose={() => setStickyVisible(false)}
+          onNext={() => setStickyTrackIdx(i => (i + 1) % videoTracks.length)}
+          onPrev={() => setStickyTrackIdx(i => (i - 1 + videoTracks.length) % videoTracks.length)}
+        />
+      )}
 
       {/* ── FOOTER ── */}
       <footer className="border-t border-[oklch(1_0_0/8%)] py-12">
