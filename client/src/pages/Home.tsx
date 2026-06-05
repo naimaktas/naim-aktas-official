@@ -6,7 +6,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
 import { tracks, socialLinks, getYoutubeThumbnail, type Track } from "@/lib/tracks";
-import { Youtube, Instagram, Facebook, Play, Music, Search, ChevronDown, SkipForward, Volume2 } from "lucide-react";
+import { Youtube, Instagram, Facebook, Play, Music, Search, ChevronDown, SkipForward, SkipBack, X, Pause } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 const HERO_BG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663717952494/7fq3tAvW7VqE5bTKhyUqbk/hero-bg-8qJMMprqM2GN4rhKce3xgc.webp";
