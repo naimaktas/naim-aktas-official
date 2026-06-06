@@ -606,7 +606,7 @@ export default function Home() {
                 <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer"
                   className="flex items-center gap-2 px-6 py-3 bg-[oklch(0.75_0.18_45)] text-[oklch(0.08_0.015_265)] rounded-full font-semibold text-sm tracking-wide hover:bg-[oklch(0.82_0.18_45)] active:scale-[0.97] transition-all duration-200">
                   <Youtube className="w-4 h-4" />
-                  YouTube'da İzle
+                  YouTube’da İzle
                 </a>
                 <button onClick={scrollToTracks}
                   className="flex items-center gap-2 px-6 py-3 border border-[oklch(0.75_0.18_45/45%)] text-[oklch(0.85_0.005_65)] rounded-full font-medium text-sm tracking-wide hover:border-[oklch(0.75_0.18_45/80%)] hover:bg-[oklch(0.75_0.18_45/10%)] active:scale-[0.97] transition-all duration-200">
@@ -802,10 +802,10 @@ export default function Home() {
                   Naim Aktaş, Türk halk müziğinin özgün ve güçlü seslerinden biridir. Yıllar boyunca sahne alan sanatçı, türkü ve uzun hava yorumlarıyla dinleyicilerin gönlünde derin izler bırakmıştır.
                 </p>
                 <p>
-                  Anadolu&apos;nun dört bir yanından derlediği türküleri; içtenliği, duygusallığı ve güçlü yorumuyla hayata geçiren Naim Aktaş, halk müziğimizin yaşayan temsilcilerinden biri olmayı sürdürmektedir.
+                  Anadolu’nun dört bir yanından derlediği türküleri; içtenliği, duygusallığı ve güçlü yorumuyla hayata geçiren Naim Aktaş, halk müziğimizin yaşayan temsilcilerinden biri olmayı sürdürmektedir.
                 </p>
                 <p>
-                  2020 yılında dijital arşivini yayına alan sanatçı, 5 albüm ve 71 parçalık repertuvarıyla Anadolu&apos;nun sesini gelecek nesillere taşımaktadır.
+                  2020 yılında dijital arşivini yayına alan sanatçı, 5 albüm ve 71 parçalık repertuvarıyla Anadolu’nun sesini gelecek nesillere taşımaktadır.
                 </p>
               </div>
               {/* İstatistikler */}
@@ -871,7 +871,7 @@ export default function Home() {
           <div className="text-center mt-8">
             <a href="https://www.youtube.com/channel/UCqc_HOho4odWtx3Wle7RX-Q/videos" target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-medium border border-[oklch(0.75_0.18_45/40%)] text-[oklch(0.75_0.18_45)] hover:bg-[oklch(0.75_0.18_45/10%)] transition-all duration-200">
-              <Youtube className="w-4 h-4" /> Tüm Videoları YouTube&apos;da İzle
+              <Youtube className="w-4 h-4" /> Tüm Videoları YouTube’da İzle
             </a>
           </div>
         </div>
@@ -956,8 +956,8 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-6" style={{ fontFamily: "'Cinzel', serif" }}>Naim Aktaş</h2>
               <div className="space-y-4 text-[oklch(0.65_0.01_265)] leading-relaxed" style={{ fontFamily: "'Raleway', sans-serif" }}>
                 <p>Naim Aktaş, Türk halk müziğinin özgün ve güçlü seslerinden biridir. Yıllar boyunca sahne alan sanatçı, türkü ve uzun hava yorumlarıyla dinleyicilerin gönlünde derin izler bırakmıştır.</p>
-                <p>Anadolu&apos;nun dört bir yanından derlediği türküleri; içtenliği, duygusallığı ve güçlü yorumuyla hayata geçiren Naim Aktaş, halk müziğimizin yaşayan temsilcilerinden biri olmayı sürdürmektedir.</p>
-                <p>2020 yılında dijital arşivini yayına alan sanatçı, 5 albüm ve 71 parçalık repertuvarıyla Anadolu&apos;nun sesini gelecek nesillere taşımaktadır.</p>
+                <p>Anadolu’nun dört bir yanından derlediği türküleri; içtenliği, duygusallığı ve güçlü yorumuyla hayata geçiren Naim Aktaş, halk müziğimizin yaşayan temsilcilerinden biri olmayı sürdürmektedir.</p>
+                <p>2020 yılında dijital arşivini yayına alan sanatçı, 5 albüm ve 71 parçalık repertuvarıyla Anadolu’nun sesini gelecek nesillere taşımaktadır.</p>
               </div>
               <div className="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-[oklch(1_0_0/8%)]">
                 {[{ v: "71", l: "Parça" }, { v: "5", l: "Albüm" }, { v: "2020", l: "Yılından" }].map(({ v, l }) => (
@@ -1011,7 +1011,7 @@ export default function Home() {
           <div className="text-center mt-8">
             <a href="https://www.youtube.com/channel/UCqc_HOho4odWtx3Wle7RX-Q/videos" target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-medium border border-[oklch(0.75_0.18_45/40%)] text-[oklch(0.75_0.18_45)] hover:bg-[oklch(0.75_0.18_45/10%)] transition-all duration-200">
-              <Youtube className="w-4 h-4" /> Tüm Videoları YouTube&apos;da İzle
+              <Youtube className="w-4 h-4" /> Tüm Videoları YouTube’da İzle
             </a>
           </div>
         </div>
