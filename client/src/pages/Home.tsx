@@ -138,12 +138,13 @@ function HeroCanvas() {
 
 // ── Medya Alanı: Video + Scrollable Liste ────────────────────────────────────
 function HeroPlayer({
-  current, setCurrent, playing, setPlaying
+  current, setCurrent, playing, setPlaying, iframeRef
 }: {
   current: number;
   setCurrent: (i: number) => void;
   playing: boolean;
   setPlaying: (p: boolean) => void;
+  iframeRef: React.RefObject<HTMLIFrameElement>;
 }) {
   const videoTracks = tracks.filter((t) => t.youtubeId).slice(0, 75);
   const listRef   = useRef<HTMLDivElement>(null);
@@ -172,7 +173,8 @@ function HeroPlayer({
         {playing ? (
           <iframe
             key={cur.youtubeId}
-            src={`https://www.youtube.com/embed/${cur.youtubeId}?autoplay=1&rel=0&modestbranding=1&showinfo=0`}
+            ref={iframeRef}
+            src={`https://www.youtube.com/embed/${cur.youtubeId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&enablejsapi=1`}
             className="absolute inset-0 w-full h-full"
             allow="autoplay; encrypted-media; fullscreen"
             allowFullScreen
@@ -277,8 +279,9 @@ function WaveformBars({ count = 12, className = "" }: { count?: number; classNam
 }
 
 // ── Sticky Player ──────────────────────────────────────────────────────────
+// iframe ref ile YouTube'u postMessage API üzerinden kontrol eder
 function StickyPlayer({
-  track, playing, onToggle, onClose, onNext, onPrev
+  track, playing, onToggle, onClose, onNext, onPrev, iframeRef
 }: {
   track: { id: number; title: string; youtubeId: string } | null;
   playing: boolean;
@@ -286,8 +289,23 @@ function StickyPlayer({
   onClose: () => void;
   onNext: () => void;
   onPrev: () => void;
+  iframeRef: React.RefObject<HTMLIFrameElement>;
 }) {
   if (!track) return null;
+
+  const handleToggle = () => {
+    // YouTube iframe postMessage API ile play/pause
+    const iframe = iframeRef.current;
+    if (iframe && iframe.contentWindow) {
+      const cmd = playing ? "pauseVideo" : "playVideo";
+      iframe.contentWindow.postMessage(
+        JSON.stringify({ event: "command", func: cmd, args: [] }),
+        "*"
+      );
+    }
+    onToggle();
+  };
+
   return (
     <div
       className="fixed bottom-0 left-0 right-0 z-50 flex items-center gap-4 px-4 md:px-8 py-3 border-t border-[oklch(0.75_0.18_45/15%)]"
@@ -311,8 +329,8 @@ function StickyPlayer({
         <button onClick={onPrev} className="w-8 h-8 rounded-full flex items-center justify-center text-[oklch(0.50_0.01_265)] hover:text-[oklch(0.75_0.18_45)] hover:bg-[oklch(0.75_0.18_45/10%)] transition-all">
           <SkipBack className="w-3.5 h-3.5" />
         </button>
-        <button onClick={onToggle}
-          className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-105"
+        <button onClick={handleToggle}
+          className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95"
           style={{ background: "oklch(0.75 0.18 45)", color: "oklch(0.08 0.015 265)" }}>
           {playing
             ? <span className="flex gap-[3px]"><span className="w-[3px] h-3.5 rounded-full bg-current"/><span className="w-[3px] h-3.5 rounded-full bg-current"/></span>
@@ -473,6 +491,7 @@ export default function Home() {
   const [stickyVisible, setStickyVisible] = useState(false);
   const tracksRef  = useRef<HTMLDivElement>(null);
   const heroRef    = useRef<HTMLElement>(null);
+  const iframeRef  = useRef<HTMLIFrameElement>(null);
 
   const videoTracks = tracks.filter((t) => t.youtubeId);
 
@@ -587,7 +606,7 @@ export default function Home() {
                 <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer"
                   className="flex items-center gap-2 px-6 py-3 bg-[oklch(0.75_0.18_45)] text-[oklch(0.08_0.015_265)] rounded-full font-semibold text-sm tracking-wide hover:bg-[oklch(0.82_0.18_45)] active:scale-[0.97] transition-all duration-200">
                   <Youtube className="w-4 h-4" />
-                  YouTube'da İzle
+                  YouTube’da İzle
                 </a>
                 <button onClick={scrollToTracks}
                   className="flex items-center gap-2 px-6 py-3 border border-[oklch(0.75_0.18_45/45%)] text-[oklch(0.85_0.005_65)] rounded-full font-medium text-sm tracking-wide hover:border-[oklch(0.75_0.18_45/80%)] hover:bg-[oklch(0.75_0.18_45/10%)] active:scale-[0.97] transition-all duration-200">
@@ -599,7 +618,7 @@ export default function Home() {
 
             {/* ORTA VE SAĞ BİRLEŞİK — Medya Player ve Liste */}
             <div className="w-full reveal" style={{ animationDelay: "200ms" }}>
-              <HeroPlayer current={heroCurrent} setCurrent={setHeroCurrent} playing={heroPlaying} setPlaying={setHeroPlaying} />
+              <HeroPlayer current={heroCurrent} setCurrent={setHeroCurrent} playing={heroPlaying} setPlaying={setHeroPlaying} iframeRef={iframeRef} />
             </div>
           </div>
         </div>
@@ -674,6 +693,7 @@ export default function Home() {
           onClose={() => setStickyVisible(false)}
           onNext={() => { setHeroCurrent(i => (i + 1) % videoTracks.length); setHeroPlaying(true); }}
           onPrev={() => { setHeroCurrent(i => (i - 1 + videoTracks.length) % videoTracks.length); setHeroPlaying(true); }}
+          iframeRef={iframeRef}
         />
       )}
 
@@ -782,10 +802,10 @@ export default function Home() {
                   Naim Aktaş, Türk halk müziğinin özgün ve güçlü seslerinden biridir. Yıllar boyunca sahne alan sanatçı, türkü ve uzun hava yorumlarıyla dinleyicilerin gönlünde derin izler bırakmıştır.
                 </p>
                 <p>
-                  Anadolu'nun dört bir yanından derlediği türküleri; içtenliği, duygusallığı ve güçlü yorumuyla hayata geçiren Naim Aktaş, halk müziğimizin yaşayan temsilcilerinden biri olmayı sürdürmektedir.
+                  Anadolu’nun dört bir yanından derlediği türküleri; içtenliği, duygusallığı ve güçlü yorumuyla hayata geçiren Naim Aktaş, halk müziğimizin yaşayan temsilcilerinden biri olmayı sürdürmektedir.
                 </p>
                 <p>
-                  2020 yılında dijital arşivini yayına alan sanatçı, 5 albüm ve 71 parçalık repertuvarıyla Anadolu'nun sesini gelecek nesillere taşımaktadır.
+                  2020 yılında dijital arşivini yayına alan sanatçı, 5 albüm ve 71 parçalık repertuvarıyla Anadolu’nun sesini gelecek nesillere taşımaktadır.
                 </p>
               </div>
               {/* İstatistikler */}
@@ -851,7 +871,7 @@ export default function Home() {
           <div className="text-center mt-8">
             <a href="https://www.youtube.com/channel/UCqc_HOho4odWtx3Wle7RX-Q/videos" target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-medium border border-[oklch(0.75_0.18_45/40%)] text-[oklch(0.75_0.18_45)] hover:bg-[oklch(0.75_0.18_45/10%)] transition-all duration-200">
-              <Youtube className="w-4 h-4" /> Tüm Videoları YouTube'da İzle
+              <Youtube className="w-4 h-4" /> Tüm Videoları YouTube’da İzle
             </a>
           </div>
         </div>
@@ -936,8 +956,8 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-6" style={{ fontFamily: "'Cinzel', serif" }}>Naim Aktaş</h2>
               <div className="space-y-4 text-[oklch(0.65_0.01_265)] leading-relaxed" style={{ fontFamily: "'Raleway', sans-serif" }}>
                 <p>Naim Aktaş, Türk halk müziğinin özgün ve güçlü seslerinden biridir. Yıllar boyunca sahne alan sanatçı, türkü ve uzun hava yorumlarıyla dinleyicilerin gönlünde derin izler bırakmıştır.</p>
-                <p>Anadolu'nun dört bir yanından derlediği türküleri; içtenliği, duygusallığı ve güçlü yorumuyla hayata geçiren Naim Aktaş, halk müziğimizin yaşayan temsilcilerinden biri olmayı sürdürmektedir.</p>
-                <p>2020 yılında dijital arşivini yayına alan sanatçı, 5 albüm ve 71 parçalık repertuvarıyla Anadolu'nun sesini gelecek nesillere taşımaktadır.</p>
+                <p>Anadolu’nun dört bir yanından derlediği türküleri; içtenliği, duygusallığı ve güçlü yorumuyla hayata geçiren Naim Aktaş, halk müziğimizin yaşayan temsilcilerinden biri olmayı sürdürmektedir.</p>
+                <p>2020 yılında dijital arşivini yayına alan sanatçı, 5 albüm ve 71 parçalık repertuvarıyla Anadolu’nun sesini gelecek nesillere taşımaktadır.</p>
               </div>
               <div className="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-[oklch(1_0_0/8%)]">
                 {[{ v: "71", l: "Parça" }, { v: "5", l: "Albüm" }, { v: "2020", l: "Yılından" }].map(({ v, l }) => (
@@ -991,7 +1011,7 @@ export default function Home() {
           <div className="text-center mt-8">
             <a href="https://www.youtube.com/channel/UCqc_HOho4odWtx3Wle7RX-Q/videos" target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-medium border border-[oklch(0.75_0.18_45/40%)] text-[oklch(0.75_0.18_45)] hover:bg-[oklch(0.75_0.18_45/10%)] transition-all duration-200">
-              <Youtube className="w-4 h-4" /> Tüm Videoları YouTube'da İzle
+              <Youtube className="w-4 h-4" /> Tüm Videoları YouTube’da İzle
             </a>
           </div>
         </div>
