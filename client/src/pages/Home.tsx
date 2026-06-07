@@ -611,6 +611,30 @@ export default function Home() {
         </button>
       </section>
 
+
+      {/* ── STICKY NAV ── */}
+      <nav id="section-nav" className="sticky top-16 z-40 border-b border-[oklch(0.75_0.18_45/15%)]" style={{background:"oklch(0.09 0.020 30 / 95%)",backdropFilter:"blur(20px)"}}>
+        <div className="container">
+          <div className="flex items-center gap-1 overflow-x-auto py-3" style={{scrollbarWidth:"none"}}>
+            {([
+              {id:"section-tracks",label:"Tüm Şarkılar"},
+              {id:"section-albums",label:"Diskografi"},
+              {id:"section-bio",label:"Hakkında"},
+              {id:"section-gallery",label:"Galeri"},
+            ] as {id:string;label:string}[]).map((item)=>(
+              <button key={item.id}
+                onClick={()=>document.getElementById(item.id)?.scrollIntoView({behavior:"smooth",block:"start"})}
+                className="shrink-0 px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 hover:bg-[oklch(0.75_0.18_45/15%)] hover:text-[oklch(0.75_0.18_45)] text-[oklch(0.60_0.01_265)] border border-transparent hover:border-[oklch(0.75_0.18_45/30%)]">
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </nav>
+
+      {/* ── TÜM ŞARKILAR ── */}
+      <div id="section-tracks"/>
+
       {/* ── PARÇALAR ── */}
       <section ref={tracksRef} className="py-16 md:py-24">
         <div className="container">
@@ -678,523 +702,41 @@ export default function Home() {
       )}
 
 
-      {/* ── ALBÜMLER ── */}
-      <section className="py-16 md:py-24" style={{ background: "linear-gradient(180deg, oklch(0.08 0.025 30) 0%, oklch(0.09 0.022 280) 50%, oklch(0.08 0.025 30) 100%)" }}>
-        <div className="container">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="gold-divider w-8" />
-            <span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Diskografi</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-10" style={{ fontFamily: "'Cinzel', serif" }}>
-            Albümler
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
-            {[
-              { num: 1, name: "Mamoş", subtitle: "Albüm", playlistId: "PLcNRuB4EIsB_lvMEW9z_tZVbSBj4qjcf5", videoId: "2eRQ02HokY4", tracks: 14 },
-              { num: 2, name: "Öleyimmi Sevgilim", subtitle: "Albüm", playlistId: "PLcNRuB4EIsB8tVb1LPKoi3VliEAyWYGoX", videoId: "VpAHGoXY_Co", tracks: 13 },
-              { num: 3, name: "Ağlama Yar Ağlama", subtitle: "Albüm", playlistId: "PLcNRuB4EIsB8oSLGrFoIfKCsP8VRU5KcJ", videoId: "8yQRKECpGXY", tracks: 14 },
-              { num: 4, name: "Niçin Ağlamayım", subtitle: "Albüm", playlistId: "PLcNRuB4EIsB9PB1xRcmUR1JABE691OKuH", videoId: "Qn6HW5LvJb4", tracks: 15 },
-              { num: 5, name: "Aynası Belinde", subtitle: "Albüm", playlistId: "PLcNRuB4EIsB-lrbHqc_qNaZRbHOkTRkRh", videoId: "c_oDnbah8bA", tracks: 14 },
-            ].map((album) => (
-              <a
-                key={album.num}
-                href={`https://www.youtube.com/playlist?list=${album.playlistId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative rounded-2xl overflow-hidden border border-[oklch(1_0_0/8%)] hover:border-[oklch(0.75_0.18_45/40%)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_0_1px_oklch(0.75_0.18_45/20%)]"
-                style={{ background: "oklch(0.11 0.016 265)" }}
-              >
-                {/* Kapak görseli */}
-                <div className="relative aspect-square overflow-hidden">
-                  <img
-                    src={`https://img.youtube.com/vi/${album.videoId}/maxresdefault.jpg`}
-                    alt={album.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    onError={(e) => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${album.videoId}/hqdefault.jpg`; }}
-                  />
-                  <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(5,4,14,0.95) 0%, rgba(5,4,14,0.20) 60%, transparent 100%)" }} />
-                  {/* Hover play overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "oklch(0.75 0.18 45)", boxShadow: "0 0 30px oklch(0.75 0.18 45 / 50%)" }}>
-                      <Play className="w-6 h-6 fill-current ml-0.5" style={{ color: "oklch(0.09 0.022 30)" }} />
-                    </div>
-                  </div>
-                  {/* Numara rozeti */}
-                  <div className="absolute top-3 left-3 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
-                    style={{ background: "oklch(0.75 0.18 45)", color: "oklch(0.09 0.022 30)", fontFamily: "'Cinzel', serif" }}>
-                    {album.num}
-                  </div>
-                  {/* Parça sayısı */}
-                  <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[10px] font-medium"
-                    style={{ background: "rgba(0,0,0,0.7)", color: "oklch(0.75 0.18 45)", border: "1px solid oklch(0.75 0.18 45 / 30%)" }}>
-                    {album.tracks} parça
-                  </div>
-                </div>
-                {/* Albüm bilgisi */}
-                <div className="p-4">
-                  <p className="text-[10px] text-[oklch(0.75_0.18_45)] tracking-[0.2em] uppercase mb-1">Naim Aktaş {album.num}</p>
-                  <h3 className="text-sm font-bold text-[oklch(0.92_0.005_65)] leading-tight group-hover:text-[oklch(0.75_0.18_45)] transition-colors" style={{ fontFamily: "'Cinzel', serif" }}>
-                    {album.name}
-                  </h3>
-                  <p className="text-[10px] text-[oklch(0.40_0.01_265)] mt-1 flex items-center gap-1">
-                    <Youtube className="w-3 h-3" /> YouTube Playlist
-                  </p>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── BİYOGRAFİ ── */}
-      <section className="py-16 md:py-24 relative overflow-hidden">
-        {/* Arka plan efekti */}
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 60% at 70% 50%, oklch(0.75 0.18 45 / 0.06) 0%, transparent 70%)" }} />
-        <div className="container relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Sol — Fotoğraf */}
-            <div className="relative">
-              <div className="relative rounded-2xl overflow-hidden border border-[oklch(0.75_0.18_45/20%)] shadow-[0_0_80px_rgba(0,0,0,0.6)]">
-                <img
-                  src="https://img.youtube.com/vi/-qbsoXdJJq8/maxresdefault.jpg"
-                  alt="Naim Aktaş"
-                  className="w-full object-cover"
-                  style={{ aspectRatio: "4/3" }}
-                  onError={(e) => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/-qbsoXdJJq8/hqdefault.jpg`; }}
-                />
-                <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, transparent 40%, oklch(0.07 0.018 265 / 0.7) 100%)" }} />
-              </div>
-              {/* Dekoratif altın çerçeve köşeleri */}
-              <div className="absolute -top-2 -left-2 w-8 h-8 border-t-2 border-l-2 border-[oklch(0.75_0.18_45/60%)] rounded-tl-lg" />
-              <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b-2 border-r-2 border-[oklch(0.75_0.18_45/60%)] rounded-br-lg" />
-            </div>
-            {/* Sağ — Metin */}
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="gold-divider w-8" />
-                <span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Sanatçı Hakkında</span>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-6" style={{ fontFamily: "'Cinzel', serif" }}>
-                Naim Aktaş
-              </h2>
-              <div className="space-y-4 text-[oklch(0.65_0.01_265)] leading-relaxed" style={{ fontFamily: "'Raleway', sans-serif" }}>
-                <p>
-                  Naim Aktaş, Türk halk müziğinin özgün ve güçlü seslerinden biridir. Yıllar boyunca sahne alan sanatçı, türkü ve uzun hava yorumlarıyla dinleyicilerin gönlünde derin izler bırakmıştır.
-                </p>
-                <p>
-                  Anadolu'nun dört bir yanından derlediği türküleri; içtenliği, duygusallığı ve güçlü yorumuyla hayata geçiren Naim Aktaş, halk müziğimizin yaşayan temsilcilerinden biri olmayı sürdürmektedir.
-                </p>
-                <p>
-                  2020 yılında dijital arşivini yayına alan sanatçı, 5 albüm ve 71 parçalık repertuvarıyla Anadolu'nun sesini gelecek nesillere taşımaktadır.
-                </p>
-              </div>
-              {/* İstatistikler */}
-              <div className="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-[oklch(1_0_0/8%)]">
-                {[{ v: "71", l: "Parça" }, { v: "5", l: "Albüm" }, { v: "2020", l: "Yılından" }].map(({ v, l }) => (
-                  <div key={l} className="text-center">
-                    <div className="text-2xl font-bold text-[oklch(0.78_0.18_45)]" style={{ fontFamily: "'Cinzel', serif" }}>{v}</div>
-                    <div className="text-[10px] text-[oklch(0.50_0.01_265)] tracking-[0.2em] uppercase mt-1">{l}</div>
-                  </div>
-                ))}
-              </div>
-              {/* Sosyal linkler */}
-              <div className="flex gap-3 mt-8">
-                <a href="https://www.youtube.com/channel/UCqc_HOho4odWtx3Wle7RX-Q/videos" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:opacity-80"
-                  style={{ background: "oklch(0.75 0.18 45)", color: "oklch(0.09 0.022 30)" }}>
-                  <Youtube className="w-4 h-4" /> YouTube Kanalı
-                </a>
-                <a href="https://www.instagram.com/naim.aktas/" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium border border-[oklch(0.75_0.18_45/40%)] text-[oklch(0.85_0.005_65)] transition-all hover:bg-[oklch(0.75_0.18_45/10%)]">
-                  <Instagram className="w-4 h-4" /> Instagram
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── GALERİ ── */}
-      <section className="py-16 md:py-24" style={{ background: "linear-gradient(180deg, oklch(0.08 0.025 30) 0%, oklch(0.08 0.022 275) 50%, oklch(0.08 0.025 30) 100%)" }}>
-        <div className="container">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="gold-divider w-8" />
-            <span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Görsel Arşiv</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-3" style={{ fontFamily: "'Cinzel', serif" }}>
-            Galeri
-          </h2>
-          <p className="text-sm text-[oklch(0.48_0.01_265)] mb-10">Sahne ve albüm kareleri</p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-            {[
-              "-qbsoXdJJq8", "efZbuUTeZG4", "UiNLF2Ixoh0", "e07XREPZBLQ",
-              "lhi1WVH7Lx0", "Jev7NQmwULA", "2VkVYrkb9Kc", "c1p49MsQEB4",
-              "JPaRGu7haIo", "1mK2JFN23Y4", "Yfiv_O_XepY", "3Uxw09iZRSc",
-            ].map((vid, i) => (
-              <div key={vid} className="group relative rounded-xl overflow-hidden border border-[oklch(1_0_0/8%)] hover:border-[oklch(0.75_0.18_45/40%)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.5)] cursor-pointer"
-                style={{ aspectRatio: "16/9" }}>
-                <img
-                  src={`https://img.youtube.com/vi/${vid}/maxresdefault.jpg`}
-                  alt={`Naim Aktaş ${i + 1}`}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  onError={(e) => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${vid}/hqdefault.jpg`; }}
-                />
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                  style={{ background: "rgba(0,0,0,0.45)" }}>
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "oklch(0.75 0.18 45 / 90%)" }}>
-                    <Play className="w-4 h-4 fill-current ml-0.5" style={{ color: "oklch(0.09 0.022 30)" }} />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-8">
-            <a href="https://www.youtube.com/channel/UCqc_HOho4odWtx3Wle7RX-Q/videos" target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-medium border border-[oklch(0.75_0.18_45/40%)] text-[oklch(0.75_0.18_45)] hover:bg-[oklch(0.75_0.18_45/10%)] transition-all duration-200">
-              <Youtube className="w-4 h-4" /> Tüm Videoları YouTube'da İzle
-            </a>
-          </div>
-        </div>
-      </section>
-
-
-      {/* ── ALBÜMLER ── */}
-      <section className="py-16 md:py-24" style={{ background: "linear-gradient(180deg, oklch(0.08 0.025 30) 0%, oklch(0.09 0.022 280) 50%, oklch(0.08 0.025 30) 100%)" }}>
-        <div className="container">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="gold-divider w-8" />
-            <span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Diskografi</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-10" style={{ fontFamily: "'Cinzel', serif" }}>
-            Albümler
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
-            {[
-              { num: 1, name: "Mamoş", playlistId: "PLcNRuB4EIsB_lvMEW9z_tZVbSBj4qjcf5", videoId: "2eRQ02HokY4", tracks: 14 },
-              { num: 2, name: "Öleyimmi Sevgilim", playlistId: "PLcNRuB4EIsB8tVb1LPKoi3VliEAyWYGoX", videoId: "VpAHGoXY_Co", tracks: 13 },
-              { num: 3, name: "Ağlama Yar Ağlama", playlistId: "PLcNRuB4EIsB8oSLGrFoIfKCsP8VRU5KcJ", videoId: "8yQRKECpGXY", tracks: 14 },
-              { num: 4, name: "Niçin Ağlamayım", playlistId: "PLcNRuB4EIsB9PB1xRcmUR1JABE691OKuH", videoId: "Qn6HW5LvJb4", tracks: 15 },
-              { num: 5, name: "Aynası Belinde", playlistId: "PLcNRuB4EIsB-lrbHqc_qNaZRbHOkTRkRh", videoId: "c_oDnbah8bA", tracks: 14 },
-            ].map((album) => (
-              <a key={album.num} href={`https://www.youtube.com/playlist?list=${album.playlistId}`} target="_blank" rel="noopener noreferrer"
-                className="group relative rounded-2xl overflow-hidden border border-[oklch(1_0_0/8%)] hover:border-[oklch(0.75_0.18_45/40%)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
-                style={{ background: "oklch(0.11 0.016 265)" }}>
-                <div className="relative overflow-hidden" style={{ aspectRatio: "1/1" }}>
-                  <img src={`https://img.youtube.com/vi/${album.videoId}/maxresdefault.jpg`} alt={album.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    onError={(e) => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${album.videoId}/hqdefault.jpg`; }} />
-                  <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(5,4,14,0.95) 0%, rgba(5,4,14,0.15) 60%, transparent 100%)" }} />
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "oklch(0.75 0.18 45)", boxShadow: "0 0 30px oklch(0.75 0.18 45 / 50%)" }}>
-                      <Play className="w-6 h-6 fill-current ml-0.5" style={{ color: "oklch(0.09 0.022 30)" }} />
-                    </div>
-                  </div>
-                  <div className="absolute top-3 left-3 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
-                    style={{ background: "oklch(0.75 0.18 45)", color: "oklch(0.09 0.022 30)", fontFamily: "'Cinzel', serif" }}>
-                    {album.num}
-                  </div>
-                  <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[10px] font-medium"
-                    style={{ background: "rgba(0,0,0,0.7)", color: "oklch(0.75 0.18 45)", border: "1px solid oklch(0.75 0.18 45 / 30%)" }}>
-                    {album.tracks} parça
-                  </div>
-                </div>
-                <div className="p-4">
-                  <p className="text-[10px] text-[oklch(0.75_0.18_45)] tracking-[0.2em] uppercase mb-1">Naim Aktaş {album.num}</p>
-                  <h3 className="text-sm font-bold text-[oklch(0.92_0.005_65)] leading-tight group-hover:text-[oklch(0.75_0.18_45)] transition-colors" style={{ fontFamily: "'Cinzel', serif" }}>
-                    {album.name}
-                  </h3>
-                  <p className="text-[10px] text-[oklch(0.40_0.01_265)] mt-1 flex items-center gap-1">
-                    <Youtube className="w-3 h-3 inline" /> YouTube Playlist
-                  </p>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── BİYOGRAFİ ── */}
-      <section className="py-16 md:py-24 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 60% at 70% 50%, oklch(0.75 0.18 45 / 0.06) 0%, transparent 70%)" }} />
-        <div className="container relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="relative">
-              <div className="relative rounded-2xl overflow-hidden border border-[oklch(0.75_0.18_45/20%)] shadow-[0_0_80px_rgba(0,0,0,0.6)]">
-                <img src="https://img.youtube.com/vi/-qbsoXdJJq8/maxresdefault.jpg" alt="Naim Aktaş"
-                  className="w-full object-cover" style={{ aspectRatio: "4/3" }}
-                  onError={(e) => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/-qbsoXdJJq8/hqdefault.jpg`; }} />
-                <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, transparent 40%, oklch(0.07 0.018 265 / 0.7) 100%)" }} />
-              </div>
-              <div className="absolute -top-2 -left-2 w-8 h-8 border-t-2 border-l-2 border-[oklch(0.75_0.18_45/60%)] rounded-tl-lg" />
-              <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b-2 border-r-2 border-[oklch(0.75_0.18_45/60%)] rounded-br-lg" />
-            </div>
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="gold-divider w-8" />
-                <span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Sanatçı Hakkında</span>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-6" style={{ fontFamily: "'Cinzel', serif" }}>Naim Aktaş</h2>
-              <div className="space-y-4 text-[oklch(0.65_0.01_265)] leading-relaxed" style={{ fontFamily: "'Raleway', sans-serif" }}>
-                <p>Naim Aktaş, Türk halk müziğinin özgün ve güçlü seslerinden biridir. Yıllar boyunca sahne alan sanatçı, türkü ve uzun hava yorumlarıyla dinleyicilerin gönlünde derin izler bırakmıştır.</p>
-                <p>Anadolu’nun dört bir yanından derlediği türküleri; içtenliği, duygusallığı ve güçlü yorumuyla hayata geçiren Naim Aktaş, halk müziğimizin yaşayan temsilcilerinden biri olmayı sürdürmektedir.</p>
-                <p>2020 yılında dijital arşivini yayına alan sanatçı, 5 albüm ve 71 parçalık repertuvarıyla Anadolu’nun sesini gelecek nesillere taşımaktadır.</p>
-              </div>
-              <div className="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-[oklch(1_0_0/8%)]">
-                {[{ v: "71", l: "Parça" }, { v: "5", l: "Albüm" }, { v: "2020", l: "Yılından" }].map(({ v, l }) => (
-                  <div key={l} className="text-center">
-                    <div className="text-2xl font-bold text-[oklch(0.78_0.18_45)]" style={{ fontFamily: "'Cinzel', serif" }}>{v}</div>
-                    <div className="text-[10px] text-[oklch(0.55_0.01_265)] tracking-[0.2em] uppercase mt-1">{l}</div>
-                  </div>
-                ))}
-              </div>
-              <div className="flex gap-3 mt-8">
-                <a href="https://www.youtube.com/channel/UCqc_HOho4odWtx3Wle7RX-Q/videos" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:opacity-80"
-                  style={{ background: "oklch(0.75 0.18 45)", color: "oklch(0.09 0.022 30)" }}>
-                  <Youtube className="w-4 h-4" /> YouTube Kanalı
-                </a>
-                <a href="https://www.instagram.com/naim.aktas/" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium border border-[oklch(0.75_0.18_45/40%)] text-[oklch(0.85_0.005_65)] transition-all hover:bg-[oklch(0.75_0.18_45/10%)]">
-                  <Instagram className="w-4 h-4" /> Instagram
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── GALERİ ── */}
-      <section className="py-16 md:py-24" style={{ background: "linear-gradient(180deg, oklch(0.08 0.025 30) 0%, oklch(0.085 0.02 275) 50%, oklch(0.08 0.025 30) 100%)" }}>
-        <div className="container">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="gold-divider w-8" />
-            <span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Görsel Arşiv</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-2" style={{ fontFamily: "'Cinzel', serif" }}>Galeri</h2>
-          <p className="text-sm text-[oklch(0.48_0.01_265)] mb-10">Sahne ve albüm kareleri</p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-            {["-qbsoXdJJq8","efZbuUTeZG4","UiNLF2Ixoh0","e07XREPZBLQ","lhi1WVH7Lx0","Jev7NQmwULA","2VkVYrkb9Kc","c1p49MsQEB4","JPaRGu7haIo","1mK2JFN23Y4","Yfiv_O_XepY","3Uxw09iZRSc"].map((vid, i) => (
-              <a key={vid} href={`https://www.youtube.com/watch?v=${vid}`} target="_blank" rel="noopener noreferrer"
-                className="group relative rounded-xl overflow-hidden border border-[oklch(1_0_0/8%)] hover:border-[oklch(0.75_0.18_45/40%)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
-                style={{ aspectRatio: "16/9" }}>
-                <img src={`https://img.youtube.com/vi/${vid}/maxresdefault.jpg`} alt={`Naim Aktaş ${i + 1}`}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  onError={(e) => { (e.target as HTMLImageElement).src = `https://img.youtube.com/vi/${vid}/hqdefault.jpg`; }} />
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center" style={{ background: "rgba(0,0,0,0.45)" }}>
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "oklch(0.75 0.18 45 / 90%)" }}>
-                    <Play className="w-4 h-4 fill-current ml-0.5" style={{ color: "oklch(0.09 0.022 30)" }} />
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-          <div className="text-center mt-8">
-            <a href="https://www.youtube.com/channel/UCqc_HOho4odWtx3Wle7RX-Q/videos" target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-medium border border-[oklch(0.75_0.18_45/40%)] text-[oklch(0.75_0.18_45)] hover:bg-[oklch(0.75_0.18_45/10%)] transition-all duration-200">
-              <Youtube className="w-4 h-4" /> Tüm Videoları YouTube'da İzle
-            </a>
-          </div>
-        </div>
-      </section>
-
-
-      {/* ── ÇİZİ ALTİN BAND ── */}
-      <div className="w-full py-6 border-y border-[oklch(0.75_0.18_45/20%)]" style={{background:"linear-gradient(90deg, oklch(0.10 0.030 30) 0%, oklch(0.13 0.035 35) 50%, oklch(0.10 0.030 30) 100%)"}}>
-        <div className="container">
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
-            {[{v:"71",l:"Parça"},{v:"5",l:"Albüm"},{v:"2020",l:"den beri"}].map(({v,l})=>(
-              <div key={l} className="flex items-center gap-3">
-                <span className="text-3xl font-bold" style={{fontFamily:"'Cinzel',serif",color:"oklch(0.82 0.18 45)"}}>{v}</span>
-                <span className="text-xs tracking-[0.25em] uppercase" style={{color:"oklch(0.55 0.01 265)"}}>{l}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── ALBÜMLER ── */}
-      <section className="py-20" style={{background:"linear-gradient(180deg, oklch(0.08 0.025 30) 0%, oklch(0.11 0.030 28) 50%, oklch(0.08 0.025 30) 100%)"}}>
-        <div className="container">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="gold-divider w-8"/>
-            <span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Diskografi</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-12" style={{fontFamily:"'Cinzel',serif"}}>
-            Albümler
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
-            {([
-              {num:1, name:"Mamoş", playlistId:"PLcNRuB4EIsB_lvMEW9z_tZVbSBj4qjcf5", videoId:"2eRQ02HokY4", count:14},
-              {num:2, name:"Öleyimmi Sevgilim", playlistId:"PLcNRuB4EIsB8tVb1LPKoi3VliEAyWYGoX", videoId:"VpAHGoXY_Co", count:13},
-              {num:3, name:"Ağlama Yar Ağlama", playlistId:"PLcNRuB4EIsB8oSLGrFoIfKCsP8VRU5KcJ", videoId:"8yQRKECpGXY", count:14},
-              {num:4, name:"Niçin Ağlamayım", playlistId:"PLcNRuB4EIsB9PB1xRcmUR1JABE691OKuH", videoId:"Qn6HW5LvJb4", count:15},
-              {num:5, name:"Aynası Belinde", playlistId:"PLcNRuB4EIsB-lrbHqc_qNaZRbHOkTRkRh", videoId:"c_oDnbah8bA", count:14},
-            ] as {num:number;name:string;playlistId:string;videoId:string;count:number}[]).map((a)=>(
-              <a key={a.num} href={`https://www.youtube.com/playlist?list=${a.playlistId}`} target="_blank" rel="noopener noreferrer"
-                className="group relative rounded-2xl overflow-hidden border border-[oklch(1_0_0/8%)] hover:border-[oklch(0.75_0.18_45/50%)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_0_1px_oklch(0.75_0.18_45/20%)]"
-                style={{background:"oklch(0.12 0.030 30)"}}>
-                <div className="relative overflow-hidden" style={{aspectRatio:"1/1"}}>
-                  <img src={`https://img.youtube.com/vi/${a.videoId}/maxresdefault.jpg`} alt={a.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    onError={(e)=>{(e.target as HTMLImageElement).src=`https://img.youtube.com/vi/${a.videoId}/hqdefault.jpg`;}}/>
-                  <div className="absolute inset-0" style={{background:"linear-gradient(to top,rgba(10,5,0,0.92) 0%,rgba(10,5,0,0.10) 60%,transparent 100%)"}}/>
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{background:"oklch(0.75 0.18 45)",boxShadow:"0 0 30px oklch(0.75 0.18 45 / 50%)"}}>
-                      <Play className="w-6 h-6 fill-current ml-0.5" style={{color:"oklch(0.09 0.022 30)"}}/>
-                    </div>
-                  </div>
-                  <div className="absolute top-3 left-3 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
-                    style={{background:"oklch(0.75 0.18 45)",color:"oklch(0.09 0.022 30)",fontFamily:"'Cinzel',serif"}}>
-                    {a.num}
-                  </div>
-                  <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[10px] font-medium"
-                    style={{background:"rgba(0,0,0,0.75)",color:"oklch(0.75 0.18 45)",border:"1px solid oklch(0.75 0.18 45 / 30%)"}}>
-                    {a.count} parça
-                  </div>
-                </div>
-                <div className="p-4">
-                  <p className="text-[10px] text-[oklch(0.75_0.18_45)] tracking-[0.2em] uppercase mb-1">Naim Aktaş {a.num}</p>
-                  <h3 className="text-sm font-bold text-[oklch(0.92_0.005_65)] leading-tight group-hover:text-[oklch(0.75_0.18_45)] transition-colors" style={{fontFamily:"'Cinzel',serif"}}>
-                    {a.name}
-                  </h3>
-                  <p className="text-[10px] text-[oklch(0.40_0.01_265)] mt-1">YouTube Playlist</p>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── BİYOGRAFİ ── */}
-      <section className="py-20 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none" style={{background:"radial-gradient(ellipse 70% 60% at 65% 50%, oklch(0.75 0.18 45 / 0.07) 0%, transparent 70%)"}}/>
-        <div className="container relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-            <div className="relative">
-              <div className="rounded-2xl overflow-hidden border border-[oklch(0.75_0.18_45/22%)] shadow-[0_0_80px_rgba(0,0,0,0.7)]">
-                <img src="https://img.youtube.com/vi/-qbsoXdJJq8/maxresdefault.jpg" alt="Naim Aktaş"
-                  className="w-full object-cover" style={{aspectRatio:"4/3"}}
-                  onError={(e)=>{(e.target as HTMLImageElement).src="https://img.youtube.com/vi/-qbsoXdJJq8/hqdefault.jpg";}}/>
-                <div className="absolute inset-0" style={{background:"linear-gradient(135deg,transparent 45%,oklch(0.08 0.025 30 / 0.65) 100%)"}}/>
-              </div>
-              <div className="absolute -top-2 -left-2 w-8 h-8 border-t-2 border-l-2 border-[oklch(0.75_0.18_45/60%)] rounded-tl-lg"/>
-              <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b-2 border-r-2 border-[oklch(0.75_0.18_45/60%)] rounded-br-lg"/>
-            </div>
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="gold-divider w-8"/>
-                <span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Sanatçı Hakkında</span>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-6" style={{fontFamily:"'Cinzel',serif"}}>Naim Aktaş</h2>
-              <div className="space-y-4 text-[oklch(0.65_0.01_265)] leading-relaxed" style={{fontFamily:"'Raleway',sans-serif"}}>
-                <p>Naim Aktaş, Türk halk müzinin özgün ve güçlü seslerinden biridir. Yıllar boyunca sahne alan sanatçı, türkü ve uzun hava yorumlarıyla dinleyicilerin gönlünde derin izler bırakmıştır.</p>
-                <p>Anadolu’nun dört bir yanından derlediği türküleri; içtenliği, duygusallığı ve güçlü yorumuyla hayata geçiren Naim Aktaş, halk müzimizin yaşayan temsilcilerinden biri olmayı sürdürmektedir.</p>
-                <p>2020 yılında dijital arşivini yayına alan sanatçı, 5 albüm ve 71 parçalık repertüvarıyla Anadolu’nun sesini gelecek nesillere taşımaktadır.</p>
-              </div>
-              <div className="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-[oklch(1_0_0/8%)]">
-                {[{v:"71",l:"Parça"},{v:"5",l:"Albüm"},{v:"2020",l:"Yılından"}].map(({v,l})=>(
-                  <div key={l} className="text-center">
-                    <div className="text-2xl font-bold text-[oklch(0.78_0.18_45)]" style={{fontFamily:"'Cinzel',serif"}}>{v}</div>
-                    <div className="text-[10px] text-[oklch(0.55_0.01_265)] tracking-[0.2em] uppercase mt-1">{l}</div>
-                  </div>
-                ))}
-              </div>
-              <div className="flex gap-3 mt-8">
-                <a href="https://www.youtube.com/channel/UCqc_HOho4odWtx3Wle7RX-Q/videos" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:opacity-80"
-                  style={{background:"oklch(0.75 0.18 45)",color:"oklch(0.09 0.022 30)"}}>
-                  <Youtube className="w-4 h-4"/> YouTube Kanalı
-                </a>
-                <a href="https://www.instagram.com/naim.aktas/" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium border border-[oklch(0.75_0.18_45/40%)] text-[oklch(0.85_0.005_65)] transition-all hover:bg-[oklch(0.75_0.18_45/10%)]">
-                  <Instagram className="w-4 h-4"/> Instagram
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── GALERİ ── */}
-      <section className="py-20" style={{background:"linear-gradient(180deg, oklch(0.08 0.025 30) 0%, oklch(0.11 0.028 28) 50%, oklch(0.08 0.025 30) 100%)"}}>
-        <div className="container">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="gold-divider w-8"/>
-            <span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Görsel Arşiv</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-2" style={{fontFamily:"'Cinzel',serif"}}>Galeri</h2>
-          <p className="text-sm text-[oklch(0.48_0.01_265)] mb-10">Sahne ve albüm kareleri</p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-            {(["-qbsoXdJJq8","efZbuUTeZG4","UiNLF2Ixoh0","e07XREPZBLQ","lhi1WVH7Lx0","Jev7NQmwULA","2VkVYrkb9Kc","c1p49MsQEB4","JPaRGu7haIo","1mK2JFN23Y4","Yfiv_O_XepY","3Uxw09iZRSc"] as string[]).map((vid,i)=>(
-              <a key={vid} href={`https://www.youtube.com/watch?v=${vid}`} target="_blank" rel="noopener noreferrer"
-                className="group relative rounded-xl overflow-hidden border border-[oklch(1_0_0/8%)] hover:border-[oklch(0.75_0.18_45/40%)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
-                style={{aspectRatio:"16/9"}}>
-                <img src={`https://img.youtube.com/vi/${vid}/maxresdefault.jpg`} alt={`Naim Aktaş ${i+1}`}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  onError={(e)=>{(e.target as HTMLImageElement).src=`https://img.youtube.com/vi/${vid}/hqdefault.jpg`;}}/>
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center" style={{background:"rgba(0,0,0,0.45)"}}>
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background:"oklch(0.75 0.18 45 / 90%)"}}>
-                    <Play className="w-4 h-4 fill-current ml-0.5" style={{color:"oklch(0.09 0.022 30)"}}/>
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <a href="https://www.youtube.com/channel/UCqc_HOho4odWtx3Wle7RX-Q/videos" target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-medium border border-[oklch(0.75_0.18_45/40%)] text-[oklch(0.75_0.18_45)] hover:bg-[oklch(0.75_0.18_45/10%)] transition-all duration-200">
-              <Youtube className="w-4 h-4"/> Tüm Videoları YouTube’da İzle
-            </a>
-          </div>
-        </div>
-      </section>
-
 
       {/* ── STATİSTİK BAND ── */}
-      <div className="w-full py-6 border-y border-[oklch(0.75_0.18_45/20%)]" style={{background:"linear-gradient(90deg,oklch(0.10 0.030 30) 0%,oklch(0.13 0.035 35) 50%,oklch(0.10 0.030 30) 100%)"}}>
-        <div className="container">
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
-            {([{v:"71",l:"Parça"},{v:"5",l:"Albüm"},{v:"2020",l:"den beri"}] as {v:string;l:string}[]).map(({v,l})=>(
-              <div key={l} className="flex items-center gap-3">
-                <span className="text-3xl font-bold" style={{fontFamily:"'Cinzel',serif",color:"oklch(0.82 0.18 45)"}}>{v}</span>
-                <span className="text-xs tracking-[0.25em] uppercase" style={{color:"oklch(0.55 0.01 265)"}}>{l}</span>
-              </div>
-            ))}
-          </div>
+      <div className="w-full py-5 border-y border-[oklch(0.75_0.18_45/20%)]" style={{background:"linear-gradient(90deg,oklch(0.10 0.030 30) 0%,oklch(0.14 0.038 35) 50%,oklch(0.10 0.030 30) 100%)"}}>
+        <div className="container flex flex-wrap items-center justify-center gap-8 md:gap-16">
+          {([{v:"71",l:"Parça"},{v:"5",l:"Albüm"},{v:"2020",l:"den beri"}] as {v:string;l:string}[]).map(({v,l})=>(
+            <div key={l} className="flex items-center gap-3">
+              <span className="text-3xl font-bold" style={{fontFamily:"'Cinzel',serif",color:"oklch(0.82 0.18 45)"}}>{v}</span>
+              <span className="text-xs tracking-[0.25em] uppercase" style={{color:"oklch(0.55 0.01 265)"}}>{l}</span>
+            </div>
+          ))}
         </div>
       </div>
 
       {/* ── ALBÜMLER ── */}
-      <section className="py-20" style={{background:"linear-gradient(180deg,oklch(0.08 0.025 30) 0%,oklch(0.11 0.030 28) 50%,oklch(0.08 0.025 30) 100%)"}}>
+      <section id="section-albums" className="py-20" style={{background:"linear-gradient(180deg,oklch(0.08 0.025 30) 0%,oklch(0.11 0.030 28) 50%,oklch(0.08 0.025 30) 100%)"}}>
         <div className="container">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="gold-divider w-8"/>
-            <span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Diskografi</span>
-          </div>
+          <div className="flex items-center gap-3 mb-3"><div className="gold-divider w-8"/><span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Diskografi</span></div>
           <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-12" style={{fontFamily:"'Cinzel',serif"}}>Albümler</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
-            {([{num:1,name:"Mamoş",playlistId:"PLcNRuB4EIsB_lvMEW9z_tZVbSBj4qjcf5",videoId:"2eRQ02HokY4",count:14},{num:2,name:"Öleyimmi Sevgilim",playlistId:"PLcNRuB4EIsB8tVb1LPKoi3VliEAyWYGoX",videoId:"VpAHGoXY_Co",count:13},{num:3,name:"Ağlama Yar Ağlama",playlistId:"PLcNRuB4EIsB8oSLGrFoIfKCsP8VRU5KcJ",videoId:"8yQRKECpGXY",count:14},{num:4,name:"Niçin Ağlamayım",playlistId:"PLcNRuB4EIsB9PB1xRcmUR1JABE691OKuH",videoId:"Qn6HW5LvJb4",count:15},{num:5,name:"Aynası Belinde",playlistId:"PLcNRuB4EIsB-lrbHqc_qNaZRbHOkTRkRh",videoId:"c_oDnbah8bA",count:14}] as {num:number;name:string;playlistId:string;videoId:string;count:number}[]).map((a)=>(
-              <a key={a.num} href={`https://www.youtube.com/playlist?list=${a.playlistId}`} target="_blank" rel="noopener noreferrer"
+            {([{num:1,name:"Mamoş",pid:"PLcNRuB4EIsB_lvMEW9z_tZVbSBj4qjcf5",vid:"2eRQ02HokY4",c:14},{num:2,name:"Öleyimmi Sevgilim",pid:"PLcNRuB4EIsB8tVb1LPKoi3VliEAyWYGoX",vid:"VpAHGoXY_Co",c:13},{num:3,name:"Ağlama Yar Ağlama",pid:"PLcNRuB4EIsB8oSLGrFoIfKCsP8VRU5KcJ",vid:"8yQRKECpGXY",c:14},{num:4,name:"Niçin Ağlamayım",pid:"PLcNRuB4EIsB9PB1xRcmUR1JABE691OKuH",vid:"Qn6HW5LvJb4",c:15},{num:5,name:"Aynası Belinde",pid:"PLcNRuB4EIsB-lrbHqc_qNaZRbHOkTRkRh",vid:"c_oDnbah8bA",c:14}] as {num:number;name:string;pid:string;vid:string;c:number}[]).map((a)=>(
+              <a key={a.num} href={`https://www.youtube.com/playlist?list=${a.pid}`} target="_blank" rel="noopener noreferrer"
                 className="group relative rounded-2xl overflow-hidden border border-[oklch(1_0_0/8%)] hover:border-[oklch(0.75_0.18_45/50%)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
                 style={{background:"oklch(0.12 0.030 30)"}}>
                 <div className="relative overflow-hidden" style={{aspectRatio:"1/1"}}>
-                  <img src={`https://img.youtube.com/vi/${a.videoId}/maxresdefault.jpg`} alt={a.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    onError={(e)=>{(e.target as HTMLImageElement).src=`https://img.youtube.com/vi/${a.videoId}/hqdefault.jpg`;}}/>
-                  <div className="absolute inset-0" style={{background:"linear-gradient(to top,rgba(10,5,0,0.92) 0%,rgba(10,5,0,0.10) 60%,transparent 100%)"}}/>
+                  <img src={`https://img.youtube.com/vi/${a.vid}/maxresdefault.jpg`} alt={a.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onError={(e)=>{(e.target as HTMLImageElement).src=`https://img.youtube.com/vi/${a.vid}/hqdefault.jpg`;}} />
+                  <div className="absolute inset-0" style={{background:"linear-gradient(to top,rgba(10,5,0,0.92) 0%,transparent 60%)"}}/>
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{background:"oklch(0.75 0.18 45)",boxShadow:"0 0 30px oklch(0.75 0.18 45 / 50%)"}}>
-                      <Play className="w-6 h-6 fill-current ml-0.5" style={{color:"oklch(0.08 0.015 265)"}}/>
-                    </div>
+                    <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{background:"oklch(0.75 0.18 45)",boxShadow:"0 0 30px oklch(0.75 0.18 45 / 50%)"}}><Play className="w-6 h-6 fill-current ml-0.5" style={{color:"oklch(0.08 0.015 265)"}}/></div>
                   </div>
-                  <div className="absolute top-3 left-3 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
-                    style={{background:"oklch(0.75 0.18 45)",color:"oklch(0.08 0.015 265)",fontFamily:"'Cinzel',serif"}}>{a.num}</div>
-                  <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[10px] font-medium"
-                    style={{background:"rgba(0,0,0,0.75)",color:"oklch(0.75 0.18 45)",border:"1px solid oklch(0.75 0.18 45 / 30%)"}}>{a.count} parça</div>
+                  <div className="absolute top-3 left-3 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style={{background:"oklch(0.75 0.18 45)",color:"oklch(0.08 0.015 265)",fontFamily:"'Cinzel',serif"}}>{a.num}</div>
+                  <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[10px]" style={{background:"rgba(0,0,0,0.75)",color:"oklch(0.75 0.18 45)",border:"1px solid oklch(0.75 0.18 45 / 30%)"}}>{a.c} parça</div>
                 </div>
                 <div className="p-4">
                   <p className="text-[10px] text-[oklch(0.75_0.18_45)] tracking-[0.2em] uppercase mb-1">Naim Aktaş {a.num}</p>
-                  <h3 className="text-sm font-bold text-[oklch(0.92_0.005_65)] leading-tight group-hover:text-[oklch(0.75_0.18_45)] transition-colors" style={{fontFamily:"'Cinzel',serif"}}>{a.name}</h3>
+                  <h3 className="text-sm font-bold text-[oklch(0.92_0.005_65)] group-hover:text-[oklch(0.75_0.18_45)] transition-colors" style={{fontFamily:"'Cinzel',serif"}}>{a.name}</h3>
                   <p className="text-[10px] text-[oklch(0.40_0.01_265)] mt-1">YouTube Playlist</p>
                 </div>
               </a>
@@ -1204,24 +746,19 @@ export default function Home() {
       </section>
 
       {/* ── BİYOGRAFİ ── */}
-      <section className="py-20 relative overflow-hidden">
+      <section id="section-bio" className="py-20 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" style={{background:"radial-gradient(ellipse 70% 60% at 65% 50%,oklch(0.75 0.18 45 / 0.07) 0%,transparent 70%)"}}/>
         <div className="container relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
             <div className="relative">
               <div className="rounded-2xl overflow-hidden border border-[oklch(0.75_0.18_45/22%)] shadow-[0_0_80px_rgba(0,0,0,0.7)]">
-                <img src="https://img.youtube.com/vi/-qbsoXdJJq8/maxresdefault.jpg" alt="Naim Aktaş"
-                  className="w-full object-cover" style={{aspectRatio:"4/3"}}
-                  onError={(e)=>{(e.target as HTMLImageElement).src="https://img.youtube.com/vi/-qbsoXdJJq8/hqdefault.jpg";}}/>
+                <img src="https://img.youtube.com/vi/-qbsoXdJJq8/maxresdefault.jpg" alt="Naim Aktaş" className="w-full object-cover" style={{aspectRatio:"4/3"}} onError={(e)=>{(e.target as HTMLImageElement).src="https://img.youtube.com/vi/-qbsoXdJJq8/hqdefault.jpg";}}/>
               </div>
               <div className="absolute -top-2 -left-2 w-8 h-8 border-t-2 border-l-2 border-[oklch(0.75_0.18_45/60%)] rounded-tl-lg"/>
               <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b-2 border-r-2 border-[oklch(0.75_0.18_45/60%)] rounded-br-lg"/>
             </div>
             <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="gold-divider w-8"/>
-                <span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Sanatçı Hakkında</span>
-              </div>
+              <div className="flex items-center gap-3 mb-4"><div className="gold-divider w-8"/><span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Sanatçı Hakkında</span></div>
               <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-6" style={{fontFamily:"'Cinzel',serif"}}>Naim Aktaş</h2>
               <div className="space-y-4 text-[oklch(0.65_0.01_265)] leading-relaxed" style={{fontFamily:"'Raleway',sans-serif"}}>
                 <p>Naim Aktaş, Türk halk müzinin özgün ve güçlü seslerinden biridir. Yıllar boyunca sahne alan sanatçı, türkü ve uzun hava yorumlarıyla dinleyicilerin gönlünde derin izler bırakmıştır.</p>
@@ -1237,13 +774,10 @@ export default function Home() {
                 ))}
               </div>
               <div className="flex gap-3 mt-8">
-                <a href="https://www.youtube.com/channel/UCqc_HOho4odWtx3Wle7RX-Q/videos" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:opacity-80"
-                  style={{background:"oklch(0.75 0.18 45)",color:"oklch(0.08 0.015 265)"}}>
+                <a href="https://www.youtube.com/channel/UCqc_HOho4odWtx3Wle7RX-Q/videos" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:opacity-80" style={{background:"oklch(0.75 0.18 45)",color:"oklch(0.08 0.015 265)"}}>
                   <Youtube className="w-4 h-4"/> YouTube Kanalı
                 </a>
-                <a href="https://www.instagram.com/naim.aktas/" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium border border-[oklch(0.75_0.18_45/40%)] text-[oklch(0.85_0.005_65)] transition-all hover:bg-[oklch(0.75_0.18_45/10%)]">
+                <a href="https://www.instagram.com/naim.aktas/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium border border-[oklch(0.75_0.18_45/40%)] text-[oklch(0.85_0.005_65)] transition-all hover:bg-[oklch(0.75_0.18_45/10%)]">
                   <Instagram className="w-4 h-4"/> Instagram
                 </a>
               </div>
@@ -1253,26 +787,18 @@ export default function Home() {
       </section>
 
       {/* ── GALERİ ── */}
-      <section className="py-20" style={{background:"linear-gradient(180deg,oklch(0.08 0.025 30) 0%,oklch(0.11 0.028 28) 50%,oklch(0.08 0.025 30) 100%)"}}>
+      <section id="section-gallery" className="py-20" style={{background:"linear-gradient(180deg,oklch(0.08 0.025 30) 0%,oklch(0.11 0.028 28) 50%,oklch(0.08 0.025 30) 100%)"}}>
         <div className="container">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="gold-divider w-8"/>
-            <span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Görsel Arşiv</span>
-          </div>
+          <div className="flex items-center gap-3 mb-3"><div className="gold-divider w-8"/><span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Görsel Arşiv</span></div>
           <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-2" style={{fontFamily:"'Cinzel',serif"}}>Galeri</h2>
           <p className="text-sm text-[oklch(0.48_0.01_265)] mb-10">Sahne ve albüm kareleri</p>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
             {(["-qbsoXdJJq8","efZbuUTeZG4","UiNLF2Ixoh0","e07XREPZBLQ","lhi1WVH7Lx0","Jev7NQmwULA","2VkVYrkb9Kc","c1p49MsQEB4","JPaRGu7haIo","1mK2JFN23Y4","Yfiv_O_XepY","3Uxw09iZRSc"] as string[]).map((vid,i)=>(
               <a key={vid} href={`https://www.youtube.com/watch?v=${vid}`} target="_blank" rel="noopener noreferrer"
-                className="group relative rounded-xl overflow-hidden border border-[oklch(1_0_0/8%)] hover:border-[oklch(0.75_0.18_45/40%)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
-                style={{aspectRatio:"16/9"}}>
-                <img src={`https://img.youtube.com/vi/${vid}/maxresdefault.jpg`} alt={`Naim Aktaş ${i+1}`}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  onError={(e)=>{(e.target as HTMLImageElement).src=`https://img.youtube.com/vi/${vid}/hqdefault.jpg`;}}/>
+                className="group relative rounded-xl overflow-hidden border border-[oklch(1_0_0/8%)] hover:border-[oklch(0.75_0.18_45/40%)] transition-all duration-300 hover:-translate-y-1" style={{aspectRatio:"16/9"}}>
+                <img src={`https://img.youtube.com/vi/${vid}/maxresdefault.jpg`} alt={`Naim Aktaş ${i+1}`} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onError={(e)=>{(e.target as HTMLImageElement).src=`https://img.youtube.com/vi/${vid}/hqdefault.jpg`;}}/>
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center" style={{background:"rgba(0,0,0,0.45)"}}>
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background:"oklch(0.75 0.18 45 / 90%)"}}>
-                    <Play className="w-4 h-4 fill-current ml-0.5" style={{color:"oklch(0.08 0.015 265)"}}/>
-                  </div>
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background:"oklch(0.75 0.18 45 / 90%)"}}><Play className="w-4 h-4 fill-current ml-0.5" style={{color:"oklch(0.08 0.015 265)"}}/></div>
                 </div>
               </a>
             ))}
