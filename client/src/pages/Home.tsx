@@ -535,7 +535,7 @@ export default function Home() {
       <Navbar scrolled={scrolled} />
 
       {/* ── HERO ── */}
-      <section ref={heroRef} className="relative flex items-center overflow-hidden" style={{minHeight:"100vh"}}>
+      <section ref={heroRef} className="relative flex items-center overflow-hidden" style={{minHeight:"100svh",paddingTop:"80px"}}>
         <div className="absolute inset-0 bg-[oklch(0.08_0.025_30)]" />
         <img src={HERO_BG} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover opacity-10 pointer-events-none" />
 
@@ -549,8 +549,8 @@ export default function Home() {
           style={{ background: "linear-gradient(to top, oklch(0.08 0.025 30) 0%, transparent 30%)" }} />
 
         {/* ── İçerik Alanı ── */}
-        <div className="container relative z-10 pt-24 pb-10 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-4 lg:gap-6 items-center">
+        <div className="container relative z-10 pb-10 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6 lg:gap-8 items-center">
 
             {/* SOL — Başlık ve bilgiler */}
             <div className="min-w-0">
@@ -615,7 +615,7 @@ export default function Home() {
       {/* ── STICKY NAV ── */}
       <nav id="section-nav" className="sticky top-16 z-40 border-b border-[oklch(0.75_0.18_45/15%)]" style={{background:"oklch(0.09 0.020 30 / 95%)",backdropFilter:"blur(20px)"}}>
         <div className="container">
-          <div className="flex items-center gap-1 overflow-x-auto py-3" style={{scrollbarWidth:"none"}}>
+          <div className="flex items-center gap-1 overflow-x-auto py-3 -mx-4 px-4 md:mx-0 md:px-0" style={{scrollbarWidth:"none",msOverflowStyle:"none"}}>
             {([
               {id:"section-tracks",label:"Tüm Şarkılar"},
               {id:"section-albums",label:"Diskografi"},
@@ -669,7 +669,7 @@ export default function Home() {
           </div>
           <div className="gold-divider mb-12" />
           {displayedTracks.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
               {displayedTracks.map((track, index) => <TrackCard key={track.id} track={track} index={index} />)}
             </div>
           ) : (
@@ -705,7 +705,7 @@ export default function Home() {
 
       {/* ── STATİSTİK BAND ── */}
       <div className="w-full py-5 border-y border-[oklch(0.75_0.18_45/20%)]" style={{background:"linear-gradient(90deg,oklch(0.10 0.030 30) 0%,oklch(0.14 0.038 35) 50%,oklch(0.10 0.030 30) 100%)"}}>
-        <div className="container flex flex-wrap items-center justify-center gap-8 md:gap-16">
+        <div className="container flex flex-wrap items-center justify-center gap-6 md:gap-14">
           {([{v:"71",l:"Parça"},{v:"5",l:"Albüm"},{v:"2020",l:"den beri"}] as {v:string;l:string}[]).map(({v,l})=>(
             <div key={l} className="flex items-center gap-3">
               <span className="text-3xl font-bold" style={{fontFamily:"'Cinzel',serif",color:"oklch(0.82 0.18 45)"}}>{v}</span>
@@ -720,7 +720,7 @@ export default function Home() {
         <div className="container">
           <div className="flex items-center gap-3 mb-3"><div className="gold-divider w-8"/><span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Diskografi</span></div>
           <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-12" style={{fontFamily:"'Cinzel',serif"}}>Albümler</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-5">
             {([{num:1,name:"Mamoş",pid:"PLcNRuB4EIsB_lvMEW9z_tZVbSBj4qjcf5",vid:"2eRQ02HokY4",c:14},{num:2,name:"Öleyimmi Sevgilim",pid:"PLcNRuB4EIsB8tVb1LPKoi3VliEAyWYGoX",vid:"VpAHGoXY_Co",c:13},{num:3,name:"Ağlama Yar Ağlama",pid:"PLcNRuB4EIsB8oSLGrFoIfKCsP8VRU5KcJ",vid:"8yQRKECpGXY",c:14},{num:4,name:"Niçin Ağlamayım",pid:"PLcNRuB4EIsB9PB1xRcmUR1JABE691OKuH",vid:"Qn6HW5LvJb4",c:15},{num:5,name:"Aynası Belinde",pid:"PLcNRuB4EIsB-lrbHqc_qNaZRbHOkTRkRh",vid:"c_oDnbah8bA",c:14}] as {num:number;name:string;pid:string;vid:string;c:number}[]).map((a)=>(
               <a key={a.num} href={`https://www.youtube.com/playlist?list=${a.pid}`} target="_blank" rel="noopener noreferrer"
                 className="group relative rounded-2xl overflow-hidden border border-[oklch(1_0_0/8%)] hover:border-[oklch(0.75_0.18_45/50%)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
@@ -751,7 +751,7 @@ export default function Home() {
           <div className="flex items-center gap-3 mb-3"><div className="gold-divider w-8"/><span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Görsel Arşiv</span></div>
           <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-2" style={{fontFamily:"'Cinzel',serif"}}>Galeri</h2>
           <p className="text-sm text-[oklch(0.48_0.01_265)] mb-10">Sahne ve albüm kareleri</p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
             {(["-qbsoXdJJq8","efZbuUTeZG4","UiNLF2Ixoh0","e07XREPZBLQ","lhi1WVH7Lx0","Jev7NQmwULA","2VkVYrkb9Kc","c1p49MsQEB4","JPaRGu7haIo","1mK2JFN23Y4","Yfiv_O_XepY","3Uxw09iZRSc"] as string[]).map((vid,i)=>(
               <a key={vid} href={`https://www.youtube.com/watch?v=${vid}`} target="_blank" rel="noopener noreferrer"
                 className="group relative rounded-xl overflow-hidden border border-[oklch(1_0_0/8%)] hover:border-[oklch(0.75_0.18_45/40%)] transition-all duration-300 hover:-translate-y-1" style={{aspectRatio:"16/9"}}>
@@ -775,7 +775,7 @@ export default function Home() {
       <section id="section-bio" className="py-20 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" style={{background:"radial-gradient(ellipse 70% 60% at 65% 50%,oklch(0.75 0.18 45 / 0.07) 0%,transparent 70%)"}}/>
         <div className="container relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center">
             <div className="relative">
               <div className="rounded-2xl overflow-hidden border border-[oklch(0.75_0.18_45/22%)] shadow-[0_0_80px_rgba(0,0,0,0.7)]">
                 <img src="https://img.youtube.com/vi/-qbsoXdJJq8/maxresdefault.jpg" alt="Naim Aktaş" className="w-full object-cover" style={{aspectRatio:"4/3"}} onError={(e)=>{(e.target as HTMLImageElement).src="https://img.youtube.com/vi/-qbsoXdJJq8/hqdefault.jpg";}}/>
