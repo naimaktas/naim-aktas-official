@@ -535,7 +535,7 @@ export default function Home() {
       <Navbar scrolled={scrolled} />
 
       {/* ── HERO ── */}
-      <section ref={heroRef} className="relative overflow-hidden" style={{minHeight:"100svh"}}>
+      <section ref={heroRef} className="relative overflow-hidden" style={{background:"oklch(0.08 0.025 30)"}}>
         <div className="absolute inset-0 bg-[oklch(0.08_0.025_30)]" />
         <img src={HERO_BG} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover opacity-10 pointer-events-none" />
 
@@ -544,12 +544,12 @@ export default function Home() {
 
         {/* Sol koyu gradyan — içerik okunabilirliği */}
         <div className="absolute inset-0 pointer-events-none"
-          style={{ background: "linear-gradient(to right, oklch(0.08 0.025 30) 25%, oklch(0.07 0.018 265 / 0.65) 50%, transparent 75%)" }} />
+          style={{ background: "linear-gradient(to right, oklch(0.08 0.025 30) 30%, oklch(0.08 0.025 30 / 0.70) 55%, transparent 80%)" }} />
         <div className="absolute inset-0 pointer-events-none"
-          style={{ background: "linear-gradient(to top, oklch(0.08 0.025 30) 0%, transparent 30%)" }} />
+          style={{ background: "linear-gradient(to top, oklch(0.08 0.025 30) 0%, transparent 40%)" }} />
 
         {/* ── İçerik Alanı ── */}
-        <div className="container relative z-10 w-full" style={{paddingTop:"96px",paddingBottom:"48px"}}>
+        <div className="container relative z-10 w-full" style={{paddingTop:"108px",paddingBottom:"64px"}}>
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6 lg:gap-8 items-center">
 
             {/* SOL — Başlık ve bilgiler */}
