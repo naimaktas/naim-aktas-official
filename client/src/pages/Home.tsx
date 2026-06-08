@@ -407,10 +407,10 @@ function Navbar({ scrolled }: { scrolled: boolean }) {
             { href: socialLinks.facebook,  Icon: Facebook,  label: "Facebook"  },
           ].map(({ href, Icon, label }) => (
             <a key={label} href={href} target="_blank" rel="noopener noreferrer"
-              className="group flex items-center gap-2 px-3 py-1.5 rounded-full border border-[oklch(1_0_0/10%)] hover:border-[oklch(0.75_0.18_45/60%)] hover:bg-[oklch(0.75_0.18_45/10%)] transition-all duration-200"
+              className="group flex items-center gap-2 px-3 py-1.5 rounded-full border border-[oklch(1_0_0/22%)] hover:border-[oklch(0.75_0.18_45/70%)] hover:bg-[oklch(0.75_0.18_45/10%)] transition-all duration-200"
               aria-label={label}>
-              <Icon className="w-4 h-4 text-[oklch(0.65_0.01_265)] group-hover:text-[oklch(0.75_0.18_45)] transition-colors" />
-              <span className="hidden md:block text-xs text-[oklch(0.55_0.01_265)] group-hover:text-[oklch(0.85_0.005_65)] transition-colors">{label}</span>
+              <Icon className="w-4 h-4 text-[oklch(0.80_0.01_265)] group-hover:text-[oklch(0.75_0.18_45)] transition-colors" />
+              <span className="hidden md:block text-xs text-[oklch(0.78_0.01_265)] group-hover:text-[oklch(0.95_0.005_65)] transition-colors">{label}</span>
             </a>
           ))}
         </div>
@@ -619,8 +619,8 @@ export default function Home() {
             {([
               {id:"section-tracks",label:"Tüm Şarkılar"},
               {id:"section-albums",label:"Diskografi"},
-              {id:"section-bio",label:"Hakkında"},
               {id:"section-gallery",label:"Galeri"},
+              {id:"section-bio",label:"Hakkında"},
             ] as {id:string;label:string}[]).map((item)=>(
               <button key={item.id}
                 onClick={()=>document.getElementById(item.id)?.scrollIntoView({behavior:"smooth",block:"start"})}
@@ -745,6 +745,32 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── GALERİ ── */}
+      <section id="section-gallery" className="py-20" style={{background:"linear-gradient(180deg,oklch(0.08 0.025 30) 0%,oklch(0.11 0.028 28) 50%,oklch(0.08 0.025 30) 100%)"}}>
+        <div className="container">
+          <div className="flex items-center gap-3 mb-3"><div className="gold-divider w-8"/><span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Görsel Arşiv</span></div>
+          <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-2" style={{fontFamily:"'Cinzel',serif"}}>Galeri</h2>
+          <p className="text-sm text-[oklch(0.48_0.01_265)] mb-10">Sahne ve albüm kareleri</p>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+            {(["-qbsoXdJJq8","efZbuUTeZG4","UiNLF2Ixoh0","e07XREPZBLQ","lhi1WVH7Lx0","Jev7NQmwULA","2VkVYrkb9Kc","c1p49MsQEB4","JPaRGu7haIo","1mK2JFN23Y4","Yfiv_O_XepY","3Uxw09iZRSc"] as string[]).map((vid,i)=>(
+              <a key={vid} href={`https://www.youtube.com/watch?v=${vid}`} target="_blank" rel="noopener noreferrer"
+                className="group relative rounded-xl overflow-hidden border border-[oklch(1_0_0/8%)] hover:border-[oklch(0.75_0.18_45/40%)] transition-all duration-300 hover:-translate-y-1" style={{aspectRatio:"16/9"}}>
+                <img src={`https://img.youtube.com/vi/${vid}/maxresdefault.jpg`} alt={`Naim Aktaş ${i+1}`} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onError={(e)=>{(e.target as HTMLImageElement).src=`https://img.youtube.com/vi/${vid}/hqdefault.jpg`;}}/>
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center" style={{background:"rgba(0,0,0,0.45)"}}>
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background:"oklch(0.75 0.18 45 / 90%)"}}><Play className="w-4 h-4 fill-current ml-0.5" style={{color:"oklch(0.08 0.015 265)"}}/></div>
+                </div>
+              </a>
+            ))}
+          </div>
+          <div className="text-center mt-10">
+            <a href="https://www.youtube.com/channel/UCqc_HOho4odWtx3Wle7RX-Q/videos" target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-medium border border-[oklch(0.75_0.18_45/40%)] text-[oklch(0.75_0.18_45)] hover:bg-[oklch(0.75_0.18_45/10%)] transition-all duration-200">
+              <Youtube className="w-4 h-4"/> Tüm Videoları YouTube’da İzle
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* ── BİYOGRAFİ ── */}
       <section id="section-bio" className="py-20 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" style={{background:"radial-gradient(ellipse 70% 60% at 65% 50%,oklch(0.75 0.18 45 / 0.07) 0%,transparent 70%)"}}/>
@@ -782,32 +808,6 @@ export default function Home() {
                 </a>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── GALERİ ── */}
-      <section id="section-gallery" className="py-20" style={{background:"linear-gradient(180deg,oklch(0.08 0.025 30) 0%,oklch(0.11 0.028 28) 50%,oklch(0.08 0.025 30) 100%)"}}>
-        <div className="container">
-          <div className="flex items-center gap-3 mb-3"><div className="gold-divider w-8"/><span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Görsel Arşiv</span></div>
-          <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-2" style={{fontFamily:"'Cinzel',serif"}}>Galeri</h2>
-          <p className="text-sm text-[oklch(0.48_0.01_265)] mb-10">Sahne ve albüm kareleri</p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-            {(["-qbsoXdJJq8","efZbuUTeZG4","UiNLF2Ixoh0","e07XREPZBLQ","lhi1WVH7Lx0","Jev7NQmwULA","2VkVYrkb9Kc","c1p49MsQEB4","JPaRGu7haIo","1mK2JFN23Y4","Yfiv_O_XepY","3Uxw09iZRSc"] as string[]).map((vid,i)=>(
-              <a key={vid} href={`https://www.youtube.com/watch?v=${vid}`} target="_blank" rel="noopener noreferrer"
-                className="group relative rounded-xl overflow-hidden border border-[oklch(1_0_0/8%)] hover:border-[oklch(0.75_0.18_45/40%)] transition-all duration-300 hover:-translate-y-1" style={{aspectRatio:"16/9"}}>
-                <img src={`https://img.youtube.com/vi/${vid}/maxresdefault.jpg`} alt={`Naim Aktaş ${i+1}`} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onError={(e)=>{(e.target as HTMLImageElement).src=`https://img.youtube.com/vi/${vid}/hqdefault.jpg`;}}/>
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center" style={{background:"rgba(0,0,0,0.45)"}}>
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background:"oklch(0.75 0.18 45 / 90%)"}}><Play className="w-4 h-4 fill-current ml-0.5" style={{color:"oklch(0.08 0.015 265)"}}/></div>
-                </div>
-              </a>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <a href="https://www.youtube.com/channel/UCqc_HOho4odWtx3Wle7RX-Q/videos" target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-medium border border-[oklch(0.75_0.18_45/40%)] text-[oklch(0.75_0.18_45)] hover:bg-[oklch(0.75_0.18_45/10%)] transition-all duration-200">
-              <Youtube className="w-4 h-4"/> Tüm Videoları YouTube’da İzle
-            </a>
           </div>
         </div>
       </section>
