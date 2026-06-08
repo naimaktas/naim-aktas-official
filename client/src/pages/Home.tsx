@@ -503,7 +503,7 @@ export default function Home() {
   const stickyTrack = videoTracks[heroCurrent] ?? null;
 
   return (
-    <div className={`min-h-screen bg-[oklch(0.08_0.025_30)] ${stickyVisible && stickyTrack ? "pb-16" : ""}`}>
+    <div className={`bg-[oklch(0.08_0.025_30)] ${stickyVisible && stickyTrack ? "pb-16" : ""}`}>
 
       <style>{`
         @keyframes goldFlow {
@@ -535,7 +535,7 @@ export default function Home() {
       <Navbar scrolled={scrolled} />
 
       {/* ── HERO ── */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden">
+      <section ref={heroRef} className="relative flex items-center overflow-hidden" style={{minHeight:"100vh"}}>
         <div className="absolute inset-0 bg-[oklch(0.08_0.025_30)]" />
         <img src={HERO_BG} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover opacity-10 pointer-events-none" />
 
@@ -549,7 +549,7 @@ export default function Home() {
           style={{ background: "linear-gradient(to top, oklch(0.08 0.025 30) 0%, transparent 30%)" }} />
 
         {/* ── İçerik Alanı ── */}
-        <div className="container relative z-10 pt-20 pb-10 w-full">
+        <div className="container relative z-10 pt-24 pb-10 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-4 lg:gap-6 items-center">
 
             {/* SOL — Başlık ve bilgiler */}
