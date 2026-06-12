@@ -633,7 +633,7 @@ export default function Home() {
       </nav>
 
       {/* ── TÜM ŞARKILAR ── */}
-      <div id="section-tracks"/>
+      <div id="section-tracks" style={{scrollMarginTop:"116px"}}/>
 
       {/* ── PARÇALAR ── */}
       <section ref={tracksRef} className="py-16 md:py-24">
@@ -716,7 +716,7 @@ export default function Home() {
       </div>
 
       {/* ── ALBÜMLER ── */}
-      <section id="section-albums" className="py-20" style={{background:"linear-gradient(180deg,oklch(0.08 0.025 30) 0%,oklch(0.11 0.030 28) 50%,oklch(0.08 0.025 30) 100%)"}}>
+      <section id="section-albums" className="py-20" style={{background:"linear-gradient(180deg,oklch(0.08 0.025 30) 0%,oklch(0.11 0.030 28) 50%,oklch(0.08 0.025 30) 100%)",scrollMarginTop:"116px"}}>
         <div className="container">
           <div className="flex items-center gap-3 mb-3"><div className="gold-divider w-8"/><span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Diskografi</span></div>
           <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-12" style={{fontFamily:"'Cinzel',serif"}}>Albümler</h2>
@@ -746,7 +746,7 @@ export default function Home() {
       </section>
 
       {/* ── GALERİ ── */}
-      <section id="section-gallery" className="py-20" style={{background:"linear-gradient(180deg,oklch(0.08 0.025 30) 0%,oklch(0.11 0.028 28) 50%,oklch(0.08 0.025 30) 100%)"}}>
+      <section id="section-gallery" className="py-20" style={{background:"linear-gradient(180deg,oklch(0.08 0.025 30) 0%,oklch(0.11 0.028 28) 50%,oklch(0.08 0.025 30) 100%)",scrollMarginTop:"116px"}}>
         <div className="container">
           <div className="flex items-center gap-3 mb-3"><div className="gold-divider w-8"/><span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Görsel Arşiv</span></div>
           <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)] mb-2" style={{fontFamily:"'Cinzel',serif"}}>Galeri</h2>
@@ -772,7 +772,7 @@ export default function Home() {
       </section>
 
       {/* ── BİYOGRAFİ ── */}
-      <section id="section-bio" className="py-20 relative overflow-hidden">
+      <section id="section-bio" className="py-20 relative overflow-hidden" style={{scrollMarginTop:"116px"}}>
         <div className="absolute inset-0 pointer-events-none" style={{background:"radial-gradient(ellipse 70% 60% at 65% 50%,oklch(0.75 0.18 45 / 0.07) 0%,transparent 70%)"}}/>
         <div className="container relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center">
