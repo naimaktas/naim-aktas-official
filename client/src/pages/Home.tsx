@@ -557,7 +557,7 @@ export default function Home() {
 
         {/* ── İçerik Alanı ── */}
         <div className="container relative z-10 w-full" style={{paddingTop:"108px",paddingBottom:"64px"}}>
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6 lg:gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-6 lg:gap-10 items-center">
 
             {/* SOL — Başlık ve bilgiler */}
             <div className="min-w-0">
@@ -569,8 +569,8 @@ export default function Home() {
               </div>
 
               <h1 className="font-bold leading-[0.88] tracking-tight reveal" style={{ fontFamily: "'Cinzel', serif", animationDelay: "80ms" }}>
-                <span className="block title-naim" style={{ fontSize: "clamp(3.8rem, 8vw, 7rem)", color: "oklch(0.96 0.005 65)" }}>NAİM</span>
-                <span className="block text-gold-animated" style={{ fontSize: "clamp(3.8rem, 8vw, 7rem)" }}>AKTAŞ</span>
+                <span className="block title-naim" style={{ fontSize: "clamp(4.5rem, 11vw, 10rem)", color: "oklch(0.97 0.005 65)" }}>NAİM</span>
+                <span className="block text-gold-animated" style={{ fontSize: "clamp(4.5rem, 11vw, 10rem)" }}>AKTAŞ</span>
               </h1>
 
               <p className="text-base text-[oklch(0.58_0.01_265)] mt-3 mb-5 font-light tracking-[0.14em] reveal"
