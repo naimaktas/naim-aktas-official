@@ -537,14 +537,21 @@ export default function Home() {
       {/* ── HERO ── */}
       <section ref={heroRef} className="relative overflow-hidden" style={{background:"oklch(0.08 0.025 30)"}}>
         <div className="absolute inset-0 bg-[oklch(0.08_0.025_30)]" />
-        <img src={HERO_BG} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover opacity-10 pointer-events-none" />
+        {/* Büyük sanatçı portresi - sağ tarafa odaklı */}
+        <img src="https://img.youtube.com/vi/-qbsoXdJJq8/maxresdefault.jpg" alt="" aria-hidden
+          className="absolute inset-0 w-full h-full object-cover opacity-25"
+          style={{ objectPosition: "85% center", filter: "grayscale(40%) contrast(1.1)" }}
+          onError={(e) => { (e.target as HTMLImageElement).src = "https://img.youtube.com/vi/-qbsoXdJJq8/hqdefault.jpg"; }} />
+        {/* Sıcak altın overlay - fotoğrafı tonla */}
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(135deg, oklch(0.08 0.025 30 / 0.55) 0%, oklch(0.12 0.035 35 / 0.35) 50%, oklch(0.08 0.025 30 / 0.65) 100%)" }} />
+        <img src={HERO_BG} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover opacity-5 pointer-events-none" />
 
         {/* Canvas dalgalar */}
         <HeroCanvas />
 
         {/* Sol koyu gradyan — içerik okunabilirliği */}
         <div className="absolute inset-0 pointer-events-none"
-          style={{ background: "linear-gradient(to right, oklch(0.08 0.025 30) 30%, oklch(0.08 0.025 30 / 0.70) 55%, transparent 80%)" }} />
+          style={{ background: "linear-gradient(to right, oklch(0.08 0.025 30) 38%, oklch(0.08 0.025 30 / 0.80) 60%, oklch(0.08 0.025 30 / 0.25) 85%, transparent 100%)" }} />
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: "linear-gradient(to top, oklch(0.08 0.025 30) 0%, transparent 40%)" }} />
 
@@ -636,22 +643,22 @@ export default function Home() {
       <div id="section-tracks" style={{scrollMarginTop:"116px"}}/>
 
       {/* ── PARÇALAR ── */}
-      <section ref={tracksRef} className="py-16 md:py-24">
+      <section ref={tracksRef} className="py-16 md:py-24" style={{ background: "linear-gradient(180deg, oklch(0.08 0.025 30) 0%, oklch(0.93 0.015 60) 8%, oklch(0.95 0.012 58) 92%, oklch(0.08 0.025 30) 100%)" }}>
         <div className="container">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
               <div className="flex items-center gap-3 mb-3">
                 <div className="gold-divider w-8" />
-                <span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.75_0.18_45)]">Müzik Arşivi</span>
+                <span className="text-xs tracking-[0.3em] uppercase text-[oklch(0.45_0.16_45)]">Müzik Arşivi</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-[oklch(0.95_0.005_65)]" style={{ fontFamily: "'Cinzel', serif" }}>Tüm Parçalar</h2>
-              <p className="text-sm text-[oklch(0.68_0.01_265)] mt-2">{filteredTracks.length} parça bulundu</p>
+              <p className="text-sm text-[oklch(0.40_0.02_45)] mt-2">{filteredTracks.length} parça bulundu</p>
             </div>
             <div className="relative w-full md:w-72">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[oklch(0.45_0.01_265)]" />
               <Input type="text" placeholder="Parça ara..." value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(24); }}
-                className="pl-9 bg-[oklch(0.12_0.012_265)] border-[oklch(1_0_0/10%)] text-[oklch(0.85_0.005_65)] placeholder:text-[oklch(0.35_0.01_265)] focus:border-[oklch(0.75_0.18_45/50%)] focus:ring-[oklch(0.75_0.18_45/20%)]" />
+                className="pl-9 bg-[oklch(1_0_0/60%)] border-[oklch(0.15_0.02_30/15%)] text-[oklch(0.20_0.02_30)] placeholder:text-[oklch(0.50_0.02_45)] focus:border-[oklch(0.75_0.18_45/60%)] focus:ring-[oklch(0.75_0.18_45/20%)]" />
             </div>
           </div>
           {/* Kategori filtresi */}
@@ -660,8 +667,8 @@ export default function Home() {
               <button key={cat} onClick={() => { setActiveCategory(cat); setVisibleCount(24); }}
                 className={`px-4 py-1.5 rounded-full text-xs font-medium capitalize transition-all duration-200 ${
                   activeCategory === cat
-                    ? "bg-[oklch(0.75_0.18_45)] text-[oklch(0.09_0.022_30)]"
-                    : "border border-[oklch(1_0_0/12%)] text-[oklch(0.55_0.01_265)] hover:border-[oklch(0.75_0.18_45/40%)] hover:text-[oklch(0.75_0.18_45)]"
+                    ? "bg-[oklch(0.45_0.16_45)] text-[oklch(0.97_0.01_60)]"
+                    : "border border-[oklch(0.15_0.02_30/20%)] text-[oklch(0.35_0.02_45)] hover:border-[oklch(0.45_0.16_45/50%)] hover:text-[oklch(0.45_0.16_45)]"
                 }`}>
                 {cat}
               </button>
@@ -674,14 +681,14 @@ export default function Home() {
             </div>
           ) : (
             <div className="text-center py-24">
-              <Music className="w-12 h-12 text-[oklch(0.25_0.01_265)] mx-auto mb-4" />
-              <p className="text-[oklch(0.45_0.01_265)]">Parça bulunamadı</p>
+              <Music className="w-12 h-12 text-[oklch(0.70_0.02_45)] mx-auto mb-4" />
+              <p className="text-[oklch(0.40_0.02_45)]">Parça bulunamadı</p>
             </div>
           )}
           {hasMore && (
             <div className="text-center mt-12">
               <button onClick={() => setVisibleCount((v) => v + 24)}
-                className="px-8 py-3 border border-[oklch(0.75_0.18_45/40%)] text-[oklch(0.75_0.18_45)] rounded-full text-sm font-medium hover:bg-[oklch(0.75_0.18_45/10%)] hover:border-[oklch(0.75_0.18_45/80%)] active:scale-[0.97] transition-all duration-200">
+                className="px-8 py-3 border border-[oklch(0.45_0.16_45/50%)] text-[oklch(0.45_0.16_45)] rounded-full text-sm font-medium hover:bg-[oklch(0.45_0.16_45/10%)] hover:border-[oklch(0.45_0.16_45/80%)] active:scale-[0.97] transition-all duration-200">
                 Daha Fazla Göster ({filteredTracks.length - visibleCount} parça kaldı)
               </button>
             </div>
